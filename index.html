@@ -1008,6 +1008,17 @@ function init(){
   dimFilter('fParent',    'parent',    parentData,    'pills-parent');
   dimFilter('fDSLO',      'dslo',      lapsedData,    'pills-dslo');
 
+  // UTM Source filter — navigate to UTM Source tab and activate pill
+  document.getElementById('fSource').addEventListener('change', function(){
+    const val = this.value;
+    if(!val || val==='all') return;
+    showTab('utm_src');
+    activatePill('pills-utm_src', val);
+    segmentState['utm_src'] = val;
+    buildDimCharts(utmData, val, 'utm_src');
+    updateTilesForSegment(utmData, val);
+  });
+
   // Cohort filter — navigate to cohort tab (no pills)
   document.getElementById('fCohort').addEventListener('change', function(){
     if(this.value) showTab('cohort');
