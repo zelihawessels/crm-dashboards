@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<script type="application/json" id="cowork-artifact-meta">
+{
+  "name": "Crm2 Email Insights Apr 2026",
+  "schemaVersion": 1,
+  "description": "CRM2 Email Insights monthly dashboard for April 2026. Thrive branded (#3D6B65). Full 16-month promo campaign dimension (gwp, bpo, selectscurated, selectsnew, content). Exec summary: corrected numbers, M notation, threshold applied, no cohort section. Data: Domo dataset 0297a0c7-ef0c-4668-a88e-da656b95449b, MEMBER_STATE=Member, UTM_SOURCE in (promo, lifecycle, transactional), Jan 2025–Apr 2026.",
+  "mcpTools": [
+    "mcp__domo__DomoQueryDataset"
+  ],
+  "mcpServerNames": [
+    "domo"
+  ]
+}
+</script>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Monthly CRM Email Dashboard — April 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;font-size:12px;background:#FAF3F0;color:#333}
+#app{max-width:1400px;margin:0 auto;padding:8px}
+h1{font-size:16px;color:#3D6B65;padding:8px 0;border-bottom:2px solid #3D6B65;margin-bottom:8px}
+/* Filter bar */
+#filters{background:#fff;border:1px solid #ddd;padding:8px 12px;margin-bottom:6px;border-radius:3px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+#filters label{font-weight:bold;font-size:11px;color:#555}
+#filters select{font-size:11px;padding:2px 4px;border:1px solid #ccc;border-radius:2px;min-width:100px}
+#active-filters{display:flex;flex-wrap:wrap;gap:4px;min-height:20px;padding:2px 12px 4px 12px;background:#fff;border:1px solid #ddd;border-top:none;margin-bottom:6px}
+.filter-badge{background:#3D6B65;color:#fff;padding:2px 6px;border-radius:10px;font-size:10px;cursor:pointer}
+/* Tabs */
+#tab-nav{display:flex;flex-wrap:wrap;gap:2px;margin-bottom:6px}
+.tab-btn{padding:5px 10px;font-size:11px;background:#ddd;border:none;cursor:pointer;border-radius:3px 3px 0 0;font-weight:bold;color:#555}
+.tab-btn.active{background:#3D6B65;color:#fff}
+/* Tiles */
+#tiles{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.tile{background:#fff;border:1px solid #ddd;border-left:4px solid #3D6B65;padding:8px 12px;flex:1;min-width:140px;border-radius:2px}
+.tile-label{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.5px}
+.tile-value{font-size:18px;font-weight:bold;color:#3D6B65;margin:2px 0}
+.tile-deltas{display:flex;gap:4px;flex-wrap:wrap}
+.delta{font-size:10px;padding:1px 5px;border-radius:8px;font-weight:bold}
+.delta.up{background:#d4edda;color:#155724}
+.delta.dn{background:#f8d7da;color:#721c24}
+.delta.neu{background:#e2e3e5;color:#383d41}
+/* Tab content */
+.tab-panel{display:none;background:#fff;border:1px solid #ddd;padding:10px;border-radius:0 3px 3px 3px}
+.tab-panel.active{display:block}
+/* Dimension pills */
+.pill-strip{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
+.pill{padding:3px 10px;font-size:10px;background:#e8eef5;border:1px solid #3D6B65;color:#3D6B65;border-radius:12px;cursor:pointer}
+.pill.active{background:#3D6B65;color:#fff}
+.src-btn{padding:3px 12px;font-size:10px;background:#fff;border:1px solid #aaa;color:#555;border-radius:3px;cursor:pointer}
+.src-btn.active{background:#2a4d49;border-color:#2a4d49;color:#fff;font-weight:bold}
+/* Table */
+.dim-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:6px}
+.dim-table th{padding:5px 6px;text-align:right;color:#fff;font-weight:bold;white-space:nowrap}
+.dim-table th:first-child{text-align:left;background:#555;min-width:170px}
+.dim-table td{padding:4px 6px;text-align:right;border-bottom:1px solid #eee;white-space:nowrap}
+.dim-table td:first-child{text-align:left;color:#333}
+.dim-table tr.section-hdr td{background:#ddeae9;font-weight:bold;color:#2a4d49;font-size:11px}
+.dim-table tr.vol-wt td{background:#E2EFDA;color:#375623;font-size:10px;font-style:italic}
+.dim-table tr.sub td{background:#f9f9f9}
+.good{background:#d4edda!important;color:#155724}
+.bad{background:#f8d7da!important;color:#721c24}
+.chart-row{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:12px}
+.chart-box{flex:1;min-width:280px;background:#fff;border:1px solid #eee;padding:8px;border-radius:2px}
+.chart-box h3{font-size:11px;color:#555;margin-bottom:4px}
+.exec-prose{padding:8px;font-size:12px;line-height:1.6}
+.exec-prose h2{font-size:13px;color:#3D6B65;border-bottom:1px solid #ddd;padding-bottom:4px;margin:12px 0 6px}
+.exec-prose h3{font-size:12px;font-weight:bold;color:#2a4d49;margin:14px 0 4px;text-transform:uppercase;letter-spacing:0.04em}
+.exec-prose p{margin-bottom:8px;color:#333}
+.action-card{background:#fff;border:1px solid #ddd;border-left:5px solid #ccc;padding:10px 12px;margin-bottom:8px;border-radius:2px}
+.action-card.structural{border-left-color:#c0392b}
+.action-card.seasonal{border-left-color:#2980b9}
+.action-card.monitor{border-left-color:#f39c12}
+.action-rank{font-size:10px;color:#888;margin-bottom:2px}
+.action-tag{display:inline-block;padding:1px 7px;border-radius:8px;font-size:10px;font-weight:bold;margin-bottom:4px}
+.action-tag.structural{background:#fdecea;color:#c0392b}
+.action-tag.seasonal{background:#e8f4fd;color:#2980b9}
+.action-tag.monitor{background:#fef9e7;color:#f39c12}
+.action-card.context{border-left-color:#8e44ad}
+.action-tag.context{background:#f5eef8;color:#8e44ad}
+.action-title{font-size:12px;font-weight:bold;color:#333;margin-bottom:6px}
+.action-body{font-size:11px;color:#333;line-height:1.6;margin-bottom:4px}
+.action-context{font-size:11px;color:#555;line-height:1.6;margin-top:4px}
+.action-context-label{color:#888;font-weight:normal}
+canvas{max-height:180px}
+.note{font-size:10px;color:#888;font-style:italic;margin-bottom:4px}
+</style>
+</head>
+<body>
+<div id="app">
+<h1>Monthly CRM Email Dashboard — April 2026 | Thrive Market</h1>
+
+<!-- FILTER BAR -->
+<div id="filters">
+  <label>Month:</label>
+  <select id="fMonth">
+    <option value="0">Jan 2025</option><option value="1">Feb 2025</option><option value="2">Mar 2025</option><option value="3">Apr 2025</option><option value="4">May 2025</option><option value="5">Jun 2025</option><option value="6">Jul 2025</option><option value="7">Aug 2025</option><option value="8">Sep 2025</option><option value="9">Oct 2025</option><option value="10">Nov 2025</option><option value="11">Dec 2025</option><option value="12">Jan 2026</option><option value="13">Feb 2026</option><option value="14">Mar 2026</option><option value="15" selected>Apr 2026</option>
+  </select>
+  <label>UTM Source:</label>
+  <select id="fSource" multiple size="1">
+    <option value="all" selected>All Sources</option>
+    <option value="promo">promo</option>
+    <option value="lifecycle">lifecycle</option>
+    <option value="transactional">transactional</option>
+  </select>
+  <label>Audience:</label>
+  <select id="fAudience">
+    <option value="">— All —</option>
+    <option value="Onboarding (0-2 orders)">Onboarding (0-2)</option>
+    <option value="Habit Formation (3-7 orders)">Habit Formation (3-7)</option>
+    <option value="Power Members (8+ orders)">Power Members (8+)</option>
+  </select>
+  <label>Autoship:</label>
+  <select id="fAutoship">
+    <option value="">— All —</option>
+    <option value="Active">Active</option>
+    <option value="Active (no subscribed items)">Active (no items)</option>
+    <option value="Cancelled">Cancelled</option>
+    <option value="Inactive">Inactive</option>
+    <option value="Paused">Paused</option>
+  </select>
+  <label>Parent:</label>
+  <select id="fParent">
+    <option value="">— All —</option>
+    <option value="Yes">Yes</option>
+    <option value="No">No</option>
+    <option value="Unknown">Unknown</option>
+  </select>
+  <label>DSLO:</label>
+  <select id="fDSLO">
+    <option value="">— All —</option>
+    <option value="No Checkouts">No Checkouts</option>
+    <option value="0 - 30">0–30</option>
+    <option value="31 - 60">31–60</option>
+    <option value="61 - 90">61–90</option>
+    <option value="91 - 120">91–120</option>
+    <option value="121+">121+</option>
+  </select>
+  <label>Cohort:</label>
+  <select id="fCohort">
+    <option value="">— All —</option>
+    <option value="2018">2018</option>
+    <option value="2019">2019</option>
+    <option value="2020">2020</option>
+    <option value="2021">2021</option>
+    <option value="2022">2022</option>
+    <option value="2023">2023</option>
+    <option value="2024">2024</option>
+    <option value="2025">2025</option>
+    <option value="2026">2026</option>
+  </select>
+  <label>UTM Campaign:</label>
+  <select id="fCampaign">
+    <option value="">— All —</option>
+    <optgroup label="Promo">
+      <option value="promo|bpo">bpo</option>
+      <option value="promo|gwp">gwp</option>
+      <option value="promo|selectscurated">selectscurated</option>
+      <option value="promo|selectsnew">selectsnew</option>
+      <option value="promo|content">content</option>
+    </optgroup>
+    <optgroup label="Lifecycle">
+      <option value="lifecycle|pricedrop_alert">pricedrop_alert</option>
+      <option value="lifecycle|d2m_welcome">d2m_welcome</option>
+      <option value="lifecycle|member_activation">member_activation</option>
+      <option value="lifecycle|triggerednewitemsv1">triggerednewitemsv1</option>
+      <option value="lifecycle|parent_series">parent_series</option>
+    </optgroup>
+    <optgroup label="Transactional">
+      <option value="transactional|autoship2">autoship2</option>
+      <option value="transactional|shipconfirmation">shipconfirmation</option>
+      <option value="transactional|orderconfirmation">orderconfirmation</option>
+      <option value="transactional|orderdelivered">orderdelivered</option>
+      <option value="transactional|membership_charge">membership_charge</option>
+    </optgroup>
+  </select>
+</div>
+<div id="active-filters"></div>
+
+<!-- TILES -->
+<div id="tiles">
+  <div class="tile"><div class="tile-label">Delivered</div><div class="tile-value" id="t-del">—</div><div class="tile-deltas" id="td-del"></div></div>
+  <div class="tile"><div class="tile-label">Unique CTR</div><div class="tile-value" id="t-ctr">—</div><div class="tile-deltas" id="td-ctr"></div></div>
+  <div class="tile"><div class="tile-label">Purchase CVR</div><div class="tile-value" id="t-cvr">—</div><div class="tile-deltas" id="td-cvr"></div></div>
+  <div class="tile"><div class="tile-label">Revenue</div><div class="tile-value" id="t-rev">—</div><div class="tile-deltas" id="td-rev"></div></div>
+  <div class="tile"><div class="tile-label">AOV</div><div class="tile-value" id="t-aov">—</div><div class="tile-deltas" id="td-aov"></div></div>
+  <div class="tile"><div class="tile-label">Opt-out %</div><div class="tile-value" id="t-opt">—</div><div class="tile-deltas" id="td-opt"></div></div>
+</div>
+
+<!-- TABS -->
+<div id="tab-nav">
+  <button class="tab-btn active" data-tab="summary" onclick="showTab('summary')">Summary</button>
+  <button class="tab-btn" data-tab="audience" onclick="showTab('audience')">Audience</button>
+  <button class="tab-btn" data-tab="aud_exp" onclick="showTab('aud_exp')">Audience Expanded</button>
+  <button class="tab-btn" data-tab="autoship" onclick="showTab('autoship')">Autoship Status</button>
+  <button class="tab-btn" data-tab="parent" onclick="showTab('parent')">Parent Flag</button>
+  <button class="tab-btn" data-tab="dslo" onclick="showTab('dslo')">DSLO</button>
+  <button class="tab-btn" data-tab="dslo_det" onclick="showTab('dslo_det')">DSLO Detailed</button>
+  <button class="tab-btn" data-tab="cohort" onclick="showTab('cohort')">Cohort Year</button>
+  <button class="tab-btn" data-tab="utm_src" onclick="showTab('utm_src')">UTM Source</button>
+  <button class="tab-btn" data-tab="campaign" onclick="showTab('campaign')">UTM Campaign</button>
+  <button class="tab-btn" data-tab="exec" onclick="showTab('exec')">Exec Summary</button>
+  <button class="tab-btn" data-tab="actions" onclick="showTab('actions')">Actions</button>
+</div>
+
+<!-- SUMMARY TAB -->
+<div id="panel-summary" class="tab-panel active">
+  <div class="chart-row">
+    <div class="chart-box"><h3>Delivered Volume (All Sources)</h3><canvas id="ch-del"></canvas></div>
+    <div class="chart-box"><h3>Unique CTR (%)</h3><canvas id="ch-ctr"></canvas></div>
+    <div class="chart-box"><h3>Purchase CVR (%)</h3><canvas id="ch-cvr"></canvas></div>
+    <div class="chart-box"><h3>Opt-out Rate (%)</h3><canvas id="ch-opt"></canvas></div>
+  </div>
+  <div id="summary-table-wrap"></div>
+</div>
+
+<!-- AUDIENCE TAB -->
+<div id="panel-audience" class="tab-panel">
+  <div class="pill-strip" id="pills-audience"></div>
+  <div class="chart-row" id="charts-audience">
+    <div class="chart-box"><h3>Delivered Volume</h3><canvas id="ch-audience-del"></canvas></div>
+    <div class="chart-box"><h3>Unique CTR (%)</h3><canvas id="ch-audience-ctr"></canvas></div>
+    <div class="chart-box"><h3>Purchase CVR (%)</h3><canvas id="ch-audience-cvr"></canvas></div>
+    <div class="chart-box"><h3>Opt-out Rate (%)</h3><canvas id="ch-audience-opt"></canvas></div>
+  </div>
+  <div id="tbl-audience"></div>
+</div>
+
+<!-- AUDIENCE EXPANDED TAB -->
+<div id="panel-aud_exp" class="tab-panel">
+  <div class="pill-strip" id="pills-aud_exp"></div>
+  <div class="chart-row" id="charts-aud_exp">
+    <div class="chart-box"><h3>Delivered Volume</h3><canvas id="ch-aud_exp-del"></canvas></div>
+    <div class="chart-box"><h3>Unique CTR (%)</h3><canvas id="ch-aud_exp-ctr"></canvas></div>
+    <div class="chart-box"><h3>Purchase CVR (%)</h3><canvas id="ch-aud_exp-cvr"></canvas></div>
+    <div class="chart-box"><h3>Opt-out Rate (%)</h3><canvas id="ch-aud_exp-opt"></canvas></div>
+  </div>
+  <div id="tbl-aud_exp"></div>
+</div>
+
+<!-- AUTOSHIP TAB -->
+<div id="panel-autoship" class="tab-panel">
+  <div class="pill-strip" id="pills-autoship"></div>
+  <div class="chart-row" id="charts-autoship">
+    <div class="chart-box"><h3>Delivered Volume</h3><canvas id="ch-autoship-del"></canvas></div>
+    <div class="chart-box"><h3>Unique CTR (%)</h3><canvas id="ch-autoship-ctr"></canvas></div>
+    <div class="chart-box"><h3>Purchase CVR (%)</h3><canvas id="ch-autoship-cvr"></canvas></div>
+    <div class="chart-box"><h3>Opt-out Rate (%)</h3><canvas id="ch-autoship-opt"></canvas></div>
+  </div>
+  <div id="tbl-autoship"></div>
+</div>
+
+<!-- PARENT TAB -->
+<div id="panel-parent" class="tab-panel">
+  <div class="pill-strip" id="pills-parent"></div>
+  <div class="chart-row" id="charts-parent">
+    <div class="chart-box"><h3>Delivered Volume</h3><canvas id="ch-parent-del"></canvas></div>
+    <div class="chart-box"><h3>Unique CTR (%)</h3><canvas id="ch-parent-ctr"></canvas></div>
+    <div class="chart-box"><h3>Purchase CVR (%)</h3><canvas id="ch-parent-cvr"></canvas></div>
+    <div class="chart-box"><h3>Opt-out Rate (%)</h3><canvas id="ch-parent-opt"></canvas></div>
+  </div>
+  <div id="tbl-parent"></div>
+</div>
+
+<!-- DSLO TAB -->
+<div id="panel-dslo" class="tab-panel">
+  <div class="pill-strip" id="pills-dslo"></div>
+  <div class="chart-row" id="charts-dslo">
+    <div class="chart-box"><h3>Delivered Volume</h3><canvas id="ch-dslo-del"></canvas></div>
+    <div class="chart-box"><h3>Unique CTR (%)</h3><canvas id="ch-dslo-ctr"></canvas></div>
+    <div class="chart-box"><h3>Purchase CVR (%)</h3><canvas id="ch-dslo-cvr"></canvas></div>
+    <div class="chart-box"><h3>Opt-out Rate (%)</h3><canvas id="ch-dslo-opt"></canvas></div>
+  </div>
+  <div id="tbl-dslo"></div>
+</div>
+
+<!-- DSLO DETAILED TAB -->
+<div id="panel-dslo_det" class="tab-panel">
+  <div class="pill-strip" id="pills-dslo_det"></div>
+  <div class="chart-row" id="charts-dslo_det">
+    <div class="chart-box"><h3>Delivered Volume</h3><canvas id="ch-dslo_det-del"></canvas></div>
+    <div class="chart-box"><h3>Unique CTR (%)</h3><canvas id="ch-dslo_det-ctr"></canvas></div>
+    <div class="chart-box"><h3>Purchase CVR (%)</h3><canvas id="ch-dslo_det-cvr"></canvas></div>
+    <div class="chart-box"><h3>Opt-out Rate (%)</h3><canvas id="ch-dslo_det-opt"></canvas></div>
+  </div>
+  <div id="tbl-dslo_det"></div>
+</div>
+
+<!-- COHORT TAB -->
+<div id="panel-cohort" class="tab-panel">
+  <p class="note" style="margin:4px 0 8px">Cohort comparison: current month vs. prior month vs. prior year same month. 2026 cohort did not exist in Apr 2025; prior year column shows 0.</p>
+  <div id="tbl-cohort"></div>
+</div>
+
+<!-- UTM SOURCE TAB -->
+<div id="panel-utm_src" class="tab-panel">
+  <div class="pill-strip" id="pills-utm_src"></div>
+  <div class="chart-row" id="charts-utm_src">
+    <div class="chart-box"><h3>Delivered Volume</h3><canvas id="ch-utm_src-del"></canvas></div>
+    <div class="chart-box"><h3>Unique CTR (%)</h3><canvas id="ch-utm_src-ctr"></canvas></div>
+    <div class="chart-box"><h3>Purchase CVR (%)</h3><canvas id="ch-utm_src-cvr"></canvas></div>
+    <div class="chart-box"><h3>Opt-out Rate (%)</h3><canvas id="ch-utm_src-opt"></canvas></div>
+  </div>
+  <div id="tbl-utm_src"></div>
+</div>
+
+<!-- CAMPAIGN TAB -->
+<div id="panel-campaign" class="tab-panel">
+  <div style="display:flex;gap:6px;margin-bottom:8px;align-items:center">
+    <span style="font-size:11px;color:#555;font-weight:bold;margin-right:4px">Source:</span>
+    <button class="src-btn active" id="srcbtn-promo" onclick="setCampaignSource('promo',this)">Promo</button>
+    <button class="src-btn" id="srcbtn-lifecycle" onclick="setCampaignSource('lifecycle',this)">Lifecycle</button>
+    <button class="src-btn" id="srcbtn-transactional" onclick="setCampaignSource('transactional',this)">Transactional</button>
+  </div>
+  <div class="pill-strip" id="pills-campaign"></div>
+  <div class="chart-row" id="charts-campaign">
+    <div class="chart-box"><h3>Delivered Volume</h3><canvas id="ch-campaign-del"></canvas></div>
+    <div class="chart-box"><h3>Unique CTR (%)</h3><canvas id="ch-campaign-ctr"></canvas></div>
+    <div class="chart-box"><h3>Purchase CVR (%)</h3><canvas id="ch-campaign-cvr"></canvas></div>
+    <div class="chart-box"><h3>Opt-out Rate (%)</h3><canvas id="ch-campaign-opt"></canvas></div>
+  </div>
+  <div id="tbl-campaign"></div>
+</div>
+
+<!-- EXEC SUMMARY TAB -->
+<div id="panel-exec" class="tab-panel">
+  <div class="exec-prose" id="exec-content"></div>
+</div>
+
+<!-- ACTIONS TAB -->
+<div id="panel-actions" class="tab-panel">
+  <div id="actions-content"></div>
+</div>
+
+</div><!-- end #app -->
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+const MONTHS = ["Jan 2025", "Feb 2025", "Mar 2025", "Apr 2025", "May 2025", "Jun 2025", "Jul 2025", "Aug 2025", "Sep 2025", "Oct 2025", "Nov 2025", "Dec 2025", "Jan 2026", "Feb 2026", "Mar 2026", "Apr 2026"];
+const utmData = {"promo": [[34965293, 279092, 26574, 2549782, 6777], [31672413, 210271, 26652, 2415832, 4739], [33330214, 205433, 23633, 2181708, 5041], [36950845, 221055, 26317, 2430613, 6949], [36152493, 219582, 23172, 2170436, 5029], [35791782, 214130, 25425, 2279027, 4969], [37443307, 244474, 31851, 2999068, 5110], [38468085, 255450, 31237, 2847067, 5458], [36114599, 228154, 32583, 2874270, 4854], [42831942, 271026, 36476, 3142915, 6024], [45178194, 307432, 39073, 3448481, 6197], [38632003, 236467, 31262, 2623370, 5516], [37502906, 274689, 29295, 2673406, 6304], [31094181, 248910, 26647, 2397480, 4032], [35608166, 263966, 24451, 2239982, 4093], [33312841, 253183, 26761, 2443377, 3605]], "lifecycle": [[5805303, 122008, 13328, 1199628, 2359], [5337461, 91109, 9914, 893073, 1734], [5611698, 89792, 9125, 848745, 1689], [4897942, 72668, 7624, 707651, 1202], [5094822, 69029, 7229, 675482, 1348], [4824965, 61289, 6834, 607486, 962], [4439517, 59161, 6993, 649210, 985], [5481557, 76722, 8271, 762946, 1229], [4478600, 59710, 5975, 539299, 1032], [6103507, 65877, 6381, 555422, 1093], [5021394, 53884, 6067, 551464, 749], [5101196, 49531, 5567, 483077, 1006], [5012837, 68801, 6558, 596060, 1383], [4586396, 64271, 5888, 551726, 1028], [5108351, 67557, 6660, 626442, 1001], [5058748, 64942, 5860, 539695, 998]], "transactional": [[4525175, 351942, 19339, 1849336, 1158], [4200833, 325304, 20779, 2018864, 1049], [4495786, 364957, 28512, 2803849, 1107], [4041945, 349126, 27106, 2648423, 885], [4251318, 355851, 25411, 2526155, 1057], [3833827, 335596, 45656, 4539899, 772], [3937441, 379424, 32334, 3142732, 827], [4106166, 355768, 24528, 2473154, 782], [4115128, 339707, 24295, 2386750, 867], [4072292, 330345, 23378, 2252897, 907], [3954397, 298659, 22215, 2111323, 878], [3552768, 279689, 17147, 1662508, 991], [4039390, 352587, 22322, 2229465, 1072], [3576155, 301678, 20008, 1974461, 924], [4288680, 326678, 21256, 2070625, 1038], [3878016, 291652, 18760, 1876233, 830]]};
+const audienceData = {"Onboarding (0-2 orders)": [[18297586, 313048, 11898, 1074120, 6641], [17154195, 259123, 11492, 1057246, 5057], [17685417, 256479, 12464, 1157566, 5274], [18198054, 232966, 11451, 1057691, 5964], [17071552, 206277, 7898, 739729, 4627], [16569913, 190588, 9338, 860449, 3904], [16386013, 226747, 12914, 1173014, 4090], [17220268, 239304, 10827, 1013130, 4430], [16222157, 206957, 8755, 788386, 4132], [18888459, 202697, 7508, 659935, 4688], [18706661, 179769, 5762, 489607, 4294], [15774741, 151430, 4531, 387433, 4031], [15793864, 234439, 7702, 705074, 4981], [13599605, 214952, 7221, 641299, 3599], [15532981, 230348, 6400, 577559, 3704], [14177185, 199019, 5642, 496574, 3287]], "Habit Formation (3-7 orders)": [[11306321, 159711, 12659, 1162124, 2191], [10057989, 134199, 12505, 1127395, 1414], [10785154, 145726, 13301, 1213772, 1482], [11520186, 148973, 13815, 1265829, 1814], [11571047, 154832, 12667, 1169184, 1653], [11478608, 147237, 18096, 1652524, 1648], [11749414, 149364, 12540, 1128657, 1558], [11959559, 144248, 11613, 1063743, 1675], [10637462, 127790, 11041, 949126, 1415], [12760816, 137243, 11458, 1000910, 1874], [12981296, 135081, 10990, 953914, 1907], [11330485, 115364, 8655, 728210, 1798], [10687054, 131146, 9110, 827461, 1919], [8674688, 111105, 8036, 714901, 1194], [9692189, 123369, 8382, 759934, 1194], [9088457, 114513, 7735, 717396, 1043]], "Power Members (8+ orders)": [[15691864, 280283, 34684, 3362502, 1462], [13998523, 233362, 33348, 3143128, 1051], [14967127, 257977, 35505, 3462965, 1081], [16172492, 260910, 35781, 3463167, 1258], [16856034, 283353, 35247, 3463159, 1154], [16402053, 273190, 50481, 4913439, 1151], [17684838, 306948, 45724, 4489339, 1274], [18875981, 304388, 41596, 4006294, 1364], [17848708, 292824, 43057, 4062807, 1206], [21358466, 327308, 47269, 4290389, 1462], [22466028, 345125, 50603, 4667748, 1623], [20180741, 298893, 40790, 3653312, 1684], [20074215, 330492, 41363, 3966397, 1859], [16982439, 288802, 37286, 3567467, 1191], [19780027, 304484, 37585, 3599557, 1234], [18983963, 296245, 38004, 3645335, 1103]]};
+const audExpData = {"Onboarding (0-2 orders)": [[18297586, 313048, 11898, 1074120, 6641], [17154195, 259123, 11492, 1057246, 5057], [17685417, 256479, 12464, 1157566, 5274], [18198054, 232966, 11451, 1057691, 5964], [17071552, 206277, 7898, 739729, 4627], [16569913, 190588, 9338, 860449, 3904], [16386013, 226747, 12914, 1173014, 4090], [17220268, 239304, 10827, 1013130, 4430], [16222157, 206957, 8755, 788386, 4132], [18888459, 202697, 7508, 659935, 4688], [18706661, 179769, 5762, 489607, 4294], [15774741, 151430, 4531, 387433, 4031], [15793864, 234439, 7702, 705074, 4981], [13599605, 214952, 7221, 641299, 3599], [15532981, 230348, 6400, 577559, 3704], [14177185, 199019, 5642, 496574, 3287]], "Habit Formation (3-7 orders)": [[11306321, 159711, 12659, 1162124, 2191], [10057989, 134199, 12505, 1127395, 1414], [10785154, 145726, 13301, 1213772, 1482], [11520186, 148973, 13815, 1265829, 1814], [11571047, 154832, 12667, 1169184, 1653], [11478608, 147237, 18096, 1652524, 1648], [11749414, 149364, 12540, 1128657, 1558], [11959559, 144248, 11613, 1063743, 1675], [10637462, 127790, 11041, 949126, 1415], [12760816, 137243, 11458, 1000910, 1874], [12981296, 135081, 10990, 953914, 1907], [11330485, 115364, 8655, 728210, 1798], [10687054, 131146, 9110, 827461, 1919], [8674688, 111105, 8036, 714901, 1194], [9692189, 123369, 8382, 759934, 1194], [9088457, 114513, 7735, 717396, 1043]], "Power Members (8-20 orders)": [[7939022, 118083, 11273, 1050956, 942], [7179289, 99492, 10974, 1006275, 701], [7788364, 110038, 11855, 1141724, 683], [8471387, 114035, 12463, 1197585, 796], [8741667, 121964, 12502, 1213193, 720], [8676229, 121018, 19434, 1872544, 690], [9240790, 133049, 15163, 1456996, 753], [9865419, 132529, 14429, 1391304, 888], [9261448, 125899, 14596, 1410677, 746], [11165656, 137424, 15392, 1420295, 942], [11584564, 138512, 14998, 1365639, 1071], [10316750, 121036, 12509, 1119679, 1074], [10124519, 138998, 13307, 1278560, 1195], [8418743, 118822, 11415, 1089056, 732], [9620126, 126122, 11431, 1089638, 737], [9126811, 118086, 10842, 1040090, 647]], "Top Tier (20+ orders)": [[7752842, 162200, 23411, 2311546, 520], [6819234, 133870, 22374, 2136852, 350], [7178763, 147939, 23650, 2321240, 398], [7701105, 146875, 23318, 2265583, 462], [8114367, 161389, 22745, 2249966, 434], [7725824, 152172, 31047, 3040895, 461], [8444048, 173899, 30561, 3032343, 521], [9010562, 171859, 27167, 2614990, 476], [8587260, 166925, 28461, 2652130, 460], [10192810, 189884, 31877, 2870094, 520], [10881464, 206613, 35605, 3302110, 552], [9863991, 177857, 28281, 2533633, 610], [9949696, 191494, 28056, 2687837, 664], [8563696, 169980, 25871, 2478411, 459], [10159901, 178362, 26154, 2509918, 497], [9857152, 178159, 27162, 2605245, 456]]};
+const autoshipData = {"Active": [[12001231, 261255, 17945, 1724263, 2003], [11435733, 237808, 18339, 1740380, 1679], [12823467, 262163, 20813, 2019742, 1825], [13623276, 256822, 21436, 2099885, 1763], [13719782, 264003, 20188, 2005673, 1663], [13226854, 254283, 34526, 3336349, 1548], [13882888, 271338, 22696, 2199550, 1554], [14857287, 285083, 22668, 2217105, 1858], [14157166, 278971, 23249, 2236263, 1735], [16869804, 288256, 25343, 2387924, 2198], [16986348, 272218, 24105, 2258063, 1988], [14576581, 241955, 19573, 1809564, 1828], [14569719, 291993, 22334, 2200152, 1956], [12542171, 262613, 20618, 2020162, 1581], [14588387, 285499, 20975, 2065343, 1587], [13810588, 266254, 19877, 1984612, 1422]], "Active (no subscribed items)": [[11958583, 224452, 18231, 1745430, 2732], [10744124, 181396, 17133, 1636982, 1975], [11274427, 190418, 17577, 1735391, 2034], [11863744, 191366, 18551, 1788145, 2175], [10868540, 179245, 15178, 1519742, 1888], [10194079, 161565, 20126, 2004152, 1616], [10552053, 172330, 17521, 1740116, 1622], [11089683, 174816, 16665, 1627206, 1800], [10242763, 157588, 16310, 1523784, 1607], [11964083, 160474, 17007, 1556186, 1866], [12190691, 156287, 17197, 1609800, 1879], [10584996, 130790, 13786, 1253080, 1875], [10435989, 165428, 14638, 1410033, 2177], [8855540, 142131, 12951, 1246926, 1472], [10163553, 147555, 12704, 1225042, 1456], [9625024, 140019, 12659, 1225186, 1310]], "Cancelled": [[9524046, 113649, 11268, 1019896, 3021], [8727278, 94444, 11950, 1029830, 2065], [9030638, 97223, 12980, 1163556, 2006], [9588845, 95528, 11926, 1073141, 2433], [10706614, 109824, 12678, 1144014, 2252], [10864845, 106337, 15341, 1347676, 2085], [11250668, 119064, 17912, 1629922, 2204], [12699087, 130269, 16505, 1472283, 2511], [11732824, 117480, 16867, 1470559, 2204], [14310404, 137758, 18148, 1511224, 2642], [21971946, 206639, 24617, 2114801, 3493], [19979128, 176255, 19461, 1608688, 3407], [19254741, 208971, 19054, 1684483, 4084], [15936643, 182968, 17199, 1495991, 2518], [18034166, 196382, 17125, 1505354, 2632], [16751161, 177223, 17407, 1523416, 2277]], "Inactive": [[10663558, 146275, 11553, 1085080, 2325], [9142665, 106397, 9689, 897417, 1624], [9008729, 103342, 9619, 886282, 1774], [9329592, 91758, 8858, 795505, 2427], [8649879, 83926, 7524, 676658, 1397], [8461410, 80869, 7655, 710498, 1193], [8369308, 111542, 12739, 1190724, 1255], [7500997, 88382, 7895, 733771, 1001], [6775649, 65792, 6151, 542675, 944], [7728453, 71312, 5484, 470396, 958], [810392, 14783, 1187, 103455, 138], [105190, 8043, 986, 84890, 86], [234552, 16827, 1914, 181584, 179], [250155, 15443, 1623, 146177, 173], [354568, 14422, 1409, 127379, 208], [363358, 13756, 1295, 113752, 185]], "Paused": [[1148353, 7411, 244, 24076, 213], [1160907, 6639, 234, 23159, 179], [1300437, 7036, 281, 29332, 198], [1485275, 7375, 276, 30011, 238], [1553818, 7464, 244, 25986, 234], [1703386, 7961, 267, 27738, 261], [1765348, 8785, 310, 30699, 287], [1908754, 9390, 303, 32803, 299], [1799925, 7740, 276, 27038, 263], [2134997, 9448, 253, 25504, 360], [2194608, 10048, 249, 25150, 326], [2040072, 8644, 170, 12732, 317], [2060132, 12858, 235, 22678, 363], [1672223, 11704, 152, 14411, 240], [1864523, 14343, 154, 13932, 249], [1699474, 12525, 143, 12338, 239]]};
+const parentData = {"Yes": [[23944962, 381156, 28111, 2798656, 5261], [22090812, 324008, 27268, 2654803, 3841], [23855974, 341642, 29306, 2945407, 3997], [25329596, 336671, 29844, 2987933, 4141], [24733694, 333138, 26790, 2745695, 3712], [24189570, 313597, 39984, 4010655, 3419], [24862665, 341367, 33143, 3315071, 3496], [26077431, 354009, 30689, 3112875, 3908], [24095226, 317338, 29463, 2871919, 3333], [28421979, 322408, 29976, 2876118, 3944], [28709079, 307356, 29249, 2798591, 3847], [24910066, 260483, 22835, 2158320, 3551], [24426920, 331087, 26188, 2672104, 3967], [20415248, 283643, 23082, 2311639, 2641], [23218816, 305911, 22976, 2323608, 2557], [21806031, 281711, 22174, 2255895, 2262]], "No": [[14718445, 264400, 22307, 1933696, 3792], [13287688, 219045, 21906, 1887800, 2787], [13742225, 234034, 23239, 2044734, 2939], [14366851, 226880, 22161, 1949834, 3370], [14561698, 229125, 20749, 1841214, 2810], [14227432, 219215, 28128, 2464983, 2467], [14715856, 247462, 27311, 2413844, 2528], [15393895, 236172, 23587, 2049603, 2688], [14341594, 219847, 23329, 2002858, 2445], [17012587, 242234, 25313, 2101488, 2924], [17601139, 248149, 26718, 2266006, 2967], [15571769, 217250, 21899, 1802986, 2958], [15586921, 268817, 23375, 2026226, 3653], [13372363, 245678, 21794, 1889646, 2537], [15540607, 259811, 21651, 1898251, 2696], [14659798, 245877, 21154, 1856542, 2404]], "Unknown": [[6632364, 107486, 8823, 866394, 1241], [5832207, 83631, 8171, 785166, 894], [5839499, 84506, 8725, 844161, 901], [6194285, 79298, 9042, 848920, 1525], [6203241, 82199, 8273, 785164, 912], [6033572, 78203, 9803, 950774, 817], [6241744, 94230, 10724, 1062095, 898], [6584482, 97759, 9760, 920689, 873], [6271507, 90386, 10061, 925542, 975], [7573175, 102606, 10946, 973627, 1156], [7843767, 104470, 11388, 1046672, 1010], [6804132, 87954, 9242, 807649, 1004], [6541292, 96173, 8612, 800601, 1139], [5469121, 85538, 7667, 722382, 806], [6245774, 92479, 7740, 715191, 879], [5783776, 82189, 8053, 746867, 767]]};
+const lapsedData = {"No Checkouts": [[7973215, 122370, 2452, 228741, 3361], [7217199, 93624, 1624, 145134, 2525], [7391088, 91329, 1631, 151224, 2677], [7857118, 88908, 1345, 127234, 3168], [7423962, 76829, 997, 96032, 2218], [7367319, 71693, 1044, 94594, 1905], [7394365, 99534, 1605, 151182, 2051], [7715075, 98118, 1684, 169930, 2141], [7256952, 76345, 1014, 92780, 2084], [8574940, 79180, 831, 71229, 2243], [8757353, 73600, 672, 60824, 1998], [7403159, 63192, 541, 46629, 1983], [7422607, 103207, 1011, 90430, 2614], [6230569, 91131, 912, 79822, 1842], [7085237, 96495, 713, 63349, 1799], [6471747, 83233, 658, 58570, 1607]], "0 - 30": [[16680593, 427514, 51034, 4814240, 2608], [15686517, 384492, 51413, 4766915, 2164], [16623282, 410938, 55413, 5277393, 2247], [16759415, 389837, 55363, 5232074, 1990], [16685450, 393469, 50535, 4859010, 1903], [14924243, 368586, 68891, 6570525, 1691], [15290598, 399897, 64844, 6162104, 1653], [16472050, 396829, 56056, 5301648, 1859], [15911639, 383359, 56069, 5162281, 1729], [18132929, 402401, 60785, 5463696, 2075], [18527156, 399734, 62199, 5641358, 1976], [15846602, 349233, 50449, 4441817, 1746], [15554935, 394571, 53228, 5030625, 1921], [13694376, 351411, 48536, 4546166, 1524], [16402255, 381404, 48362, 4567300, 1625], [15060601, 353727, 47589, 4491137, 1431]], "31 - 60": [[4902180, 67930, 2864, 284069, 794], [4312769, 48147, 2112, 211206, 554], [5273133, 61751, 2465, 242960, 646], [5477977, 61318, 2416, 246208, 724], [5363616, 62862, 2121, 221522, 706], [5406827, 59023, 4397, 436440, 653], [5658090, 65623, 2524, 263723, 657], [5505473, 63805, 2538, 259377, 631], [5212735, 59452, 2383, 228291, 560], [6415784, 66709, 2326, 217704, 786], [5958473, 62728, 2212, 217222, 723], [5242449, 50543, 1656, 160315, 646], [5470058, 68100, 2088, 208983, 678], [4290190, 55411, 1553, 157891, 500], [4803137, 53562, 1712, 169406, 504], [4940223, 58232, 1739, 182240, 482]], "61 - 90": [[2668819, 29179, 1065, 108483, 494], [2371544, 24228, 873, 83842, 349], [2468668, 21589, 617, 64213, 335], [3180969, 27855, 808, 80236, 467], [3156915, 29183, 796, 81378, 402], [3159838, 28683, 1573, 149516, 455], [3207314, 28713, 819, 89151, 401], [3326113, 32132, 1535, 151114, 458], [2688129, 27520, 1482, 159627, 338], [3437246, 28566, 934, 85104, 461], [3671609, 29862, 811, 74353, 471], [3051754, 22656, 471, 45977, 428], [2975045, 28143, 689, 69080, 445], [2573230, 27439, 584, 59220, 319], [2740041, 26148, 529, 50484, 320], [2656896, 24519, 509, 51908, 295]], "91 - 120": [[1832788, 17477, 515, 54829, 416], [1510461, 12499, 409, 41106, 269], [1501122, 12770, 283, 28697, 245], [1730910, 12990, 272, 26989, 291], [2112220, 17960, 417, 40808, 336], [2170203, 17038, 666, 62537, 305], [2136731, 17374, 445, 43800, 292], [2191216, 18045, 646, 64445, 315], [1868319, 15424, 513, 46689, 269], [2085074, 15219, 405, 35234, 331], [2344512, 16725, 433, 39444, 358], [2195993, 14481, 263, 25743, 387], [1947666, 16714, 329, 30171, 364], [1573534, 14433, 284, 27614, 214], [1847595, 17005, 314, 32011, 218], [1725317, 15782, 243, 24439, 211]], "121+": [[11238176, 88572, 1311, 108382, 2621], [10112217, 63694, 914, 79566, 1661], [10180405, 61805, 861, 69817, 1687], [10884343, 61941, 843, 73946, 2396], [10756470, 64159, 946, 73323, 1869], [11422144, 65992, 1344, 112800, 1694], [12133167, 71918, 941, 81050, 1868], [12845881, 79011, 1577, 136653, 2065], [11770553, 65471, 1392, 110652, 1773], [14361768, 75173, 954, 78267, 2128], [14894882, 77326, 1028, 78068, 2298], [13546010, 65582, 596, 48473, 2323], [13184822, 85342, 830, 69643, 2737], [10894833, 75034, 674, 52954, 1585], [12126932, 83587, 737, 54500, 1666], [11394821, 74284, 643, 51010, 1407]]};
+const dsloDetData = {"1": [[754687, 55446, 1231, 117801, 162], [649158, 50033, 1412, 149286, 106], [742482, 58260, 2282, 217021, 123], [723443, 56210, 1476, 145691, 90], [641217, 54549, 1164, 117135, 68], [531265, 53557, 1655, 161794, 48], [521435, 52087, 1265, 131556, 42], [548212, 51655, 1052, 104406, 45], [468802, 42857, 1061, 103571, 45], [513608, 46579, 901, 86275, 46], [615692, 39189, 663, 65014, 67], [446712, 38814, 623, 59935, 42], [417714, 43092, 639, 64230, 45], [366111, 35036, 627, 58029, 40], [479950, 42225, 559, 50862, 40], [483969, 39519, 486, 45468, 28]], "2": [[898191, 29001, 587, 52434, 196], [774203, 28224, 563, 56546, 121], [756758, 17386, 409, 41222, 111], [645979, 13342, 450, 52639, 94], [528727, 18208, 275, 25722, 68], [376172, 11092, 292, 29799, 39], [444420, 18134, 342, 32019, 60], [483243, 21554, 350, 34539, 57], [417298, 12179, 255, 22094, 44], [440650, 13430, 185, 16979, 56], [542114, 9178, 167, 15715, 69], [351658, 11191, 174, 14972, 49], [326207, 13657, 133, 12049, 44], [261242, 11060, 120, 9915, 39], [399780, 18029, 77, 7095, 37], [357606, 11113, 64, 4544, 31]], "3": [[688341, 15887, 326, 32835, 101], [548619, 10212, 459, 36441, 87], [492588, 7749, 251, 25666, 76], [447245, 6277, 216, 19334, 50], [360696, 6323, 156, 16044, 31], [244214, 5043, 214, 19216, 38], [345511, 6829, 198, 18895, 27], [372191, 7206, 197, 18385, 45], [324450, 6609, 177, 14131, 36], [327212, 5849, 146, 14083, 38], [467576, 7838, 223, 18201, 57], [301966, 5001, 100, 8958, 44], [229531, 7421, 111, 10692, 46], [184362, 5939, 99, 8668, 42], [305563, 9669, 62, 5606, 48], [278537, 5692, 46, 4662, 45]], "4": [[817359, 15868, 410, 37432, 128], [719037, 10427, 376, 37133, 113], [682524, 9967, 337, 30975, 119], [627069, 8680, 344, 34196, 98], [630906, 9662, 288, 25498, 90], [498497, 7888, 468, 43215, 81], [510599, 8049, 329, 35388, 74], [677196, 10128, 411, 35603, 109], [611593, 8938, 337, 29434, 64], [688856, 9429, 281, 21694, 91], [808397, 12029, 423, 35229, 110], [611518, 8605, 256, 18007, 93], [656382, 12155, 271, 22310, 89], [599781, 9704, 262, 23014, 102], [785669, 12053, 376, 32677, 102], [627832, 9934, 270, 22354, 102]], "5": [[671620, 10148, 382, 34849, 110], [491896, 6658, 332, 28560, 89], [462634, 6456, 236, 21228, 84], [380856, 5076, 290, 27444, 42], [370508, 5372, 235, 19346, 50], [276766, 4665, 405, 33845, 33], [340843, 5907, 322, 25192, 48], [329783, 5093, 269, 24281, 42], [373141, 5940, 270, 20911, 57], [416044, 5837, 281, 22019, 62], [547761, 8123, 484, 35782, 79], [394865, 5567, 235, 19355, 47], [449519, 8009, 235, 21470, 84], [393682, 6321, 201, 17828, 77], [501917, 7631, 203, 17482, 70], [392673, 6669, 142, 13751, 63]], "6": [[559436, 8033, 268, 25730, 104], [395064, 5695, 233, 23540, 58], [384434, 5722, 244, 25849, 60], [328369, 4707, 166, 14733, 57], [338294, 5304, 221, 22099, 36], [224658, 4237, 308, 31793, 30], [307793, 5419, 239, 28158, 40], [289366, 4835, 249, 21649, 59], [281342, 4893, 246, 21176, 36], [396665, 6262, 423, 30117, 46], [439391, 7039, 341, 29793, 54], [354768, 5015, 188, 13399, 45], [374394, 6385, 176, 15709, 54], [296884, 5101, 158, 13843, 33], [386478, 6062, 159, 14578, 63], [335016, 5393, 182, 14893, 47]], "7": [[518942, 7347, 268, 24208, 115], [365875, 5090, 203, 20396, 57], [361955, 5070, 251, 24969, 64], [364084, 4721, 191, 22257, 59], [521604, 6257, 184, 16443, 68], [305129, 3968, 220, 20609, 43], [460772, 5956, 229, 26137, 74], [438855, 5291, 199, 16902, 64], [449149, 5461, 205, 17577, 68], [556088, 6991, 251, 21013, 71], [619973, 8421, 315, 25524, 69], [557597, 6842, 224, 18756, 79], [565222, 7365, 178, 16845, 84], [456281, 6014, 131, 14100, 57], [561374, 6650, 430, 35108, 53], [486715, 6287, 153, 14492, 60]], "8-14": [[5285806, 173463, 42099, 3922806, 748], [4685370, 150843, 41954, 3802934, 627], [5050265, 169152, 45112, 4219351, 655], [5258415, 165199, 45883, 4246706, 572], [5293702, 161137, 42496, 4017553, 616], [4593032, 153061, 51301, 4794982, 479], [4944495, 174645, 56229, 5276756, 506], [5219563, 163930, 47480, 4444605, 600], [5142524, 168656, 47918, 4351054, 538], [5992021, 176943, 52502, 4670528, 676], [5942336, 181277, 53765, 4831683, 609], [5261391, 157425, 43892, 3825838, 530], [5333947, 177376, 46873, 4378161, 601], [4660342, 159468, 42592, 3929068, 474], [5620025, 167306, 41784, 3907181, 531], [5206574, 163706, 41887, 3905171, 444]], "15-30": [[6486211, 112321, 5463, 566144, 944], [7057295, 117310, 5881, 612079, 906], [7689642, 131176, 6291, 671111, 955], [7983955, 125625, 6347, 669074, 928], [7999796, 126657, 5516, 599171, 876], [7874510, 125075, 14028, 1435273, 900], [7414730, 122871, 5691, 588004, 782], [8113641, 127137, 5849, 601279, 838], [7843340, 127826, 5600, 582334, 841], [8801785, 131081, 5815, 580988, 989], [8543916, 126640, 5818, 584417, 862], [7566127, 110773, 4757, 462595, 817], [7202019, 119111, 4612, 489160, 874], [6475691, 112768, 4346, 471702, 660], [7361499, 111779, 4712, 496711, 681], [6891679, 105414, 4359, 465801, 611]], "31-60": [[4902180, 67930, 2864, 284069, 794], [4312769, 48147, 2112, 211206, 554], [5273133, 61751, 2465, 242960, 646], [5477977, 61318, 2416, 246208, 724], [5363616, 62862, 2121, 221522, 706], [5406827, 59023, 4397, 436440, 653], [5658090, 65623, 2524, 263723, 657], [5505473, 63805, 2538, 259377, 631], [5212735, 59452, 2383, 228291, 560], [6415784, 66709, 2326, 217704, 786], [5958473, 62728, 2212, 217222, 723], [5242449, 50543, 1656, 160315, 646], [5470058, 68100, 2088, 208983, 678], [4290190, 55411, 1553, 157891, 500], [4803137, 53562, 1712, 169406, 504], [4940223, 58232, 1739, 182240, 482]], "61-90": [[2668819, 29179, 1065, 108483, 494], [2371544, 24228, 873, 83842, 349], [2468668, 21589, 617, 64213, 335], [3180969, 27855, 808, 80236, 467], [3156915, 29183, 796, 81378, 402], [3159838, 28683, 1573, 149516, 455], [3207314, 28713, 819, 89151, 401], [3326113, 32132, 1535, 151114, 458], [2688129, 27520, 1482, 159627, 338], [3437246, 28566, 934, 85104, 461], [3671609, 29862, 811, 74353, 471], [3051754, 22656, 471, 45977, 428], [2975045, 28143, 689, 69080, 445], [2573230, 27439, 584, 59220, 319], [2740041, 26148, 529, 50484, 320], [2656896, 24519, 509, 51908, 295]], "91-120": [[1832788, 17477, 515, 54829, 416], [1510461, 12499, 409, 41106, 269], [1501122, 12770, 283, 28697, 245], [1730910, 12990, 272, 26989, 291], [2112220, 17960, 417, 40808, 336], [2170203, 17038, 666, 62537, 305], [2136731, 17374, 445, 43800, 292], [2191216, 18045, 646, 64445, 315], [1868319, 15424, 513, 46689, 269], [2085074, 15219, 405, 35234, 331], [2344512, 16725, 433, 39444, 358], [2195993, 14481, 263, 25743, 387], [1947666, 16714, 329, 30171, 364], [1573534, 14433, 284, 27614, 214], [1847595, 17005, 314, 32011, 218], [1725317, 15782, 243, 24439, 211]], "121+": [[11238176, 88572, 1311, 108382, 2621], [10112217, 63694, 914, 79566, 1661], [10180405, 61805, 861, 69817, 1687], [10884343, 61941, 843, 73946, 2396], [10756470, 64159, 946, 73323, 1869], [11422144, 65992, 1344, 112800, 1694], [12133167, 71918, 941, 81050, 1868], [12845881, 79011, 1577, 136653, 2065], [11770553, 65471, 1392, 110652, 1773], [14361768, 75173, 954, 78267, 2128], [14894882, 77326, 1028, 78068, 2298], [13546010, 65582, 596, 48473, 2323], [13184822, 85342, 830, 69643, 2737], [10894833, 75034, 674, 52954, 1585], [12126932, 83587, 737, 54500, 1666], [11394821, 74284, 643, 51010, 1407]], "No Checkouts": [[7973215, 122370, 2452, 228741, 3361], [7217199, 93624, 1624, 145134, 2525], [7391088, 91329, 1631, 151224, 2677], [7857118, 88908, 1345, 127234, 3168], [7423962, 76829, 997, 96032, 2218], [7367319, 71693, 1044, 94594, 1905], [7394365, 99534, 1605, 151182, 2051], [7715075, 98118, 1684, 169930, 2141], [7256952, 76345, 1014, 92780, 2084], [8574940, 79180, 831, 71229, 2243], [8757353, 73600, 672, 60824, 1998], [7403159, 63192, 541, 46629, 1983], [7422607, 103207, 1011, 90430, 2614], [6230569, 91131, 912, 79822, 1842], [7085237, 96495, 713, 63349, 1799], [6471747, 83233, 658, 58570, 1607]]};
+const cohortData = {"2026": [[0, 0, 0, 0, 0], [4867015, 143438, 8223, 777553, 1842], [5743156, 148248, 8744, 819982, 1944]], "2025": [[8928906, 211313, 17333, 1634410, 3022], [14101781, 184566, 12651, 1194393, 2253], [12387948, 158604, 11218, 1064478, 1754]], "2024": [[16470418, 181577, 15396, 1475581, 3031], [9311466, 105467, 8339, 792470, 863], [8600872, 96079, 7914, 770101, 742]], "2023": [[7117617, 71186, 6724, 630641, 1131], [5127437, 56092, 5021, 472180, 419], [4736638, 51442, 4687, 453894, 390]], "2022": [[3355740, 38555, 3946, 370126, 490], [2709942, 33915, 3012, 284961, 197], [2510493, 30908, 3175, 295735, 145]], "2021": [[2818316, 35103, 3532, 330172, 345], [2388373, 32533, 3008, 281041, 135], [2217867, 29071, 2892, 266597, 126]], "2020": [[3250589, 42781, 4791, 467339, 403], [2847086, 39958, 4040, 379478, 173], [2653515, 36659, 4195, 397219, 149]], "2019 & older": [[5538895, 61618, 9280, 885193, 1016], [4651750, 61217, 7573, 611403, 196], [4398217, 61651, 7639, 621723, 191]], "N/A": [[214, 0, 0, 0, 0], [113, 0, 0, 0, 0], [105, 0, 0, 0, 0]]};
+const campaignsData = {"promo|bpo": [[19999257, 157388, 16832, 1644245.87, 3698], [14759507, 88144, 10737, 1046702.5, 2153], [15112136, 92818, 8914, 884926.09, 2227], [13467681, 83084, 10232, 1015177.97, 1822], [16669987, 92738, 8601, 849439.99, 2356], [17468776, 89088, 8695, 847014.5, 2439], [16717711, 117302, 18592, 1844959.25, 2131], [24333413, 148222, 14844, 1390094.03, 3444], [18466291, 102821, 12327, 1171532.11, 2335], [16589385, 105127, 12491, 1121374.09, 2142], [29881093, 186679, 20199, 1957195.35, 4249], [20049869, 119028, 14648, 1308252.32, 2820], [15542303, 102063, 9848, 950876.35, 2311], [11850160, 86732, 7741, 741652.31, 1456], [16516977, 116887, 8501, 823739.51, 1789], [16181323, 117384, 10251, 983910.04, 1693]], "promo|gwp": [[3954120, 41243, 6036, 534085.39, 700], [10050764, 86414, 14182, 1206496.81, 1502], [12679654, 85405, 13275, 1145258.35, 1969], [10943257, 79008, 13336, 1151959.72, 1506], [7756805, 60737, 10902, 955037.57, 1041], [9674214, 79759, 13908, 1173724.01, 1272], [10858725, 73804, 10886, 928803.9, 1607], [9296889, 72389, 12075, 1075857.22, 1331], [7449867, 57890, 11011, 915141.06, 1159], [9034633, 63032, 10894, 906064.38, 1164], [11163528, 92562, 15496, 1250941.42, 1373], [11458869, 76135, 11756, 948700.67, 1406], [17474463, 141307, 17941, 1561712.43, 2820], [14485119, 126342, 17302, 1499467.61, 1983], [16509755, 130565, 15535, 1378023.61, 1966], [14026461, 117189, 16052, 1411831.36, 1585]], "promo|selectscurated": [[5411991, 40626, 1862, 186993.42, 1062], [4548752, 21747, 995, 96538.04, 699], [3169936, 13793, 719, 78677.06, 483], [7050184, 32264, 1638, 153276.98, 970], [6884427, 37170, 2285, 227246.16, 946], [5630194, 24709, 1104, 105490.93, 768], [6365293, 31366, 1513, 141510.77, 878], [2189235, 12518, 873, 81562.28, 265], [3730009, 17902, 998, 92525.99, 516], [2967292, 18034, 1151, 102957.37, 348], [25513, 85, 1, 113.29, 3], [1050509, 5131, 170, 15045.96, 221], [1050767, 7271, 448, 49400.41, 640], [2272414, 17045, 929, 89296.65, 258], [2072392, 11351, 292, 27085.23, 261], [1820041, 9992, 301, 30470.16, 169]], "promo|selectsnew": [[3265214, 31210, 1601, 163590.5, 746], [1145831, 8306, 535, 48269.93, 176], [1171167, 9291, 480, 48921.64, 183], [1156851, 9337, 485, 48870.77, 145], [3347530, 22313, 1041, 110791.33, 461], [1119472, 8843, 447, 46225.87, 145], [1688776, 12867, 541, 54569.14, 243], [0, 0, 0, 0, 0], [2201985, 14999, 824, 80874.46, 278], [1081942, 7248, 430, 42382.72, 123], [924040, 3204, 102, 10924.56, 155], [0, 0, 0, 0, 0], [2078325, 15131, 806, 88850.68, 358], [799934, 7419, 251, 28501.89, 119], [498777, 5088, 123, 11134.04, 75], [826612, 5830, 149, 16259.71, 102]], "promo|content": [[1109791, 5129, 139, 13791.94, 259], [1149434, 5616, 200, 17183.9, 199], [1183074, 4096, 245, 23925.21, 178], [2366109, 7006, 274, 28139.65, 336], [1178528, 4595, 214, 19475.12, 163], [1137560, 4484, 142, 15141.25, 198], [1794389, 9024, 317, 29005.27, 246], [674710, 2496, 54, 5484.53, 114], [1212190, 5434, 276, 27765.02, 141], [1122647, 4449, 97, 9620.15, 135], [1101002, 2669, 85, 8777.26, 117], [3101666, 20673, 1738, 147195.18, 611], [317, 0, 0, 0.0, 0], [829362, 4337, 77, 6824.22, 92], [0, 0, 0, 0, 0], [432787, 1723, 17, 1400.4, 62]], "lifecycle|pricedrop_alert": [[3192265, 42337, 5562, 494900.6, 691], [3136688, 33649, 4245, 393142.72, 482], [3624575, 36096, 3955, 363733.29, 526], [3154837, 30170, 3610, 327585.65, 426], [3380151, 31054, 3333, 317583.49, 448], [3417472, 28429, 3639, 328095.62, 401], [3095087, 26604, 3901, 371865.66, 334], [3949151, 31772, 3927, 356039.11, 450], [3039644, 23226, 2510, 227495.02, 329], [4605277, 34786, 3575, 312743.55, 477], [4024735, 31763, 3936, 365523.66, 406], [3714561, 26570, 3586, 315038.42, 424], [3496419, 32761, 3907, 356650.14, 507], [3179097, 30173, 3462, 328035.53, 384], [3533607, 33306, 4503, 423598.43, 444], [3811612, 35421, 3910, 358792.37, 470]], "lifecycle|d2m_welcome": [[707833, 43185, 4132, 381239.03, 915], [482281, 28359, 2585, 229989.64, 678], [471666, 27963, 2723, 258599.57, 667], [318003, 19768, 1664, 156538.54, 376], [275338, 15793, 1328, 131708.07, 341], [245654, 14118, 1152, 105075.47, 264], [274270, 16212, 1300, 121159.58, 340], [439559, 25873, 2391, 231054.25, 428], [308959, 17631, 1452, 128872.22, 350], [227968, 12252, 941, 84537.35, 304], [199767, 8832, 714, 64223.9, 171], [219104, 8807, 745, 64726.16, 323], [383033, 16735, 1095, 96732.91, 518], [288791, 15350, 1052, 97114.1, 327], [288564, 13819, 873, 81662.93, 286], [258747, 13458, 825, 74873.83, 280]], "lifecycle|member_activation": [[278255, 3119, 118, 10210.18, 48], [285935, 2817, 105, 8776.25, 43], [322693, 2841, 110, 10711.72, 62], [296583, 2483, 105, 9380.39, 38], [274621, 2153, 103, 8770.89, 48], [286453, 2137, 79, 6545.59, 31], [297269, 2209, 127, 10259.58, 19], [294644, 2126, 95, 8655.16, 22], [303668, 2131, 136, 12502.93, 27], [311238, 2198, 95, 8769.59, 29], [199689, 1476, 60, 4847.23, 10], [298281, 1962, 108, 8674.32, 21], [275301, 2480, 135, 14070.19, 25], [262553, 2263, 112, 9618.18, 10], [301968, 2594, 95, 8701.66, 20], [282285, 2379, 110, 10152.8, 25]], "lifecycle|triggerednewitemsv1": [[252320, 3431, 400, 41068.01, 53], [310681, 3479, 361, 34052.24, 42], [159605, 2870, 325, 35029.55, 21], [198541, 3523, 343, 33878.87, 21], [178388, 3019, 315, 31906.83, 16], [224008, 3313, 408, 37023.39, 26], [157323, 2204, 248, 25785.26, 21], [116244, 2471, 222, 22646.65, 7], [131135, 2574, 240, 22810.7, 13], [297711, 3995, 312, 30074.11, 34], [177309, 2638, 207, 19293.48, 15], [390709, 3604, 256, 22655.58, 58], [222967, 3579, 304, 32054.86, 34], [158995, 2829, 185, 20075.54, 18], [205567, 4031, 251, 28614.35, 15], [129166, 2974, 210, 23901.56, 11]], "lifecycle|parent_series": [[170579, 2079, 121, 13491.9, 39], [107545, 1086, 52, 5547.73, 34], [104983, 964, 44, 4911.08, 15], [204112, 1239, 61, 6813.28, 38], [154783, 900, 34, 3527.79, 23], [126202, 834, 42, 4338.94, 20], [221071, 1097, 50, 5672.48, 45], [174725, 1216, 45, 4096.29, 37], [148727, 903, 35, 4719.89, 37], [168775, 858, 28, 2974.59, 37], [89248, 505, 19, 1598.59, 15], [158026, 614, 23, 2369.91, 20], [172249, 1158, 55, 6293.17, 36], [146774, 971, 39, 3959.65, 33], [183381, 1081, 36, 4001.19, 42], [190997, 1130, 44, 4416.97, 40]], "transactional|autoship2": [[1150065, 136133, 10484, 1073670.98, 250], [1098451, 123784, 10193, 1047981.87, 214], [1248932, 141405, 12659, 1322850.2, 246], [1166552, 134745, 11754, 1233051.77, 226], [1320883, 149204, 12259, 1295639.11, 380], [1182399, 142143, 29354, 2955496.54, 223], [1197372, 144915, 11866, 1230930.74, 215], [1269418, 156248, 13055, 1376817.16, 220], [1212943, 158759, 13511, 1423838.61, 253], [1188114, 152986, 13627, 1401073.17, 230], [1091582, 133397, 12134, 1242323.61, 203], [987781, 124603, 10428, 1069855.85, 163], [1180046, 149210, 13320, 1398220.01, 232], [1062865, 135822, 12153, 1292819.35, 213], [1170434, 145493, 12570, 1335106.17, 205], [1116447, 136688, 11932, 1282313.15, 196]], "transactional|shipconfirmation": [[749972, 96053, 1841, 174896.43, 29], [687551, 86449, 1830, 195049.19, 27], [749727, 86329, 1817, 193294.95, 31], [682178, 78269, 1781, 175878.57, 21], [698134, 82953, 1536, 154909.21, 32], [640256, 75856, 2535, 243013.51, 18], [661061, 79827, 1900, 185524.49, 25], [699901, 84429, 1378, 136228.12, 20], [665616, 80112, 1444, 140068.37, 26], [692962, 82534, 1280, 122112.04, 35], [651991, 70110, 989, 89390.88, 38], [598378, 67185, 928, 88287.65, 30], [674835, 86384, 1047, 102972.61, 23], [603475, 68538, 988, 88079.17, 24], [679463, 74063, 859, 75871.12, 33], [624510, 62343, 755, 68298.98, 9]], "transactional|orderconfirmation": [[668414, 31045, 1184, 109463.75, 15], [621145, 27819, 976, 91768.21, 17], [680980, 26458, 1027, 94765.52, 23], [651692, 27237, 995, 96097.78, 21], [640278, 27386, 954, 95804.61, 25], [603655, 25312, 1582, 164569.6, 17], [618147, 27499, 934, 94682.81, 20], [633096, 29162, 919, 89178.91, 36], [634525, 25460, 858, 86121.74, 25], [660257, 24774, 858, 77655.72, 28], [646012, 26728, 816, 77039.68, 29], [587895, 27381, 788, 72997.27, 31], [639265, 26475, 838, 84801.16, 24], [586298, 23474, 695, 62154.3, 19], [633570, 26320, 693, 66201.67, 20], [605679, 26300, 680, 66012.26, 28]], "transactional|orderdelivered": [[809256, 11047, 266, 22843.68, 87], [731268, 8332, 210, 18853.61, 62], [747254, 7525, 194, 18562.41, 61], [669325, 6196, 162, 15101.53, 60], [701462, 6481, 158, 15771.21, 60], [640465, 6375, 171, 13007.37, 43], [664068, 7099, 184, 15626.9, 64], [663792, 7261, 160, 14341.28, 62], [666450, 6750, 152, 12149.24, 57], [671907, 6080, 128, 10189.13, 62], [626939, 5744, 118, 13158.49, 49], [570145, 5471, 162, 13654.04, 47], [493385, 5429, 123, 11835.43, 45], [409625, 6363, 201, 18329.74, 44], [687898, 8315, 127, 11462.19, 62], [655088, 5900, 79, 6410.79, 58]], "transactional|membership_charge": [[242570, 8687, 378, 25723.38, 487], [210734, 6490, 274, 20692.08, 402], [225897, 7083, 254, 18977.98, 469], [194065, 5992, 246, 21344.54, 349], [178720, 5432, 148, 11009.12, 260], [174257, 4918, 173, 13900.11, 300], [186332, 5300, 184, 13871.28, 299], [198865, 6013, 278, 24707.5, 269], [175664, 5323, 226, 17521.99, 274], [145831, 4622, 201, 14711.26, 258], [131554, 4411, 150, 11480.71, 221], [180938, 5207, 148, 10591.15, 342], [261627, 8622, 274, 21341.13, 395], [220021, 6981, 222, 15659.74, 317], [239054, 7590, 194, 13975.79, 378], [203500, 6240, 165, 14159.42, 276]]};
+const campaignSourceKeys = {"promo": ["promo|bpo", "promo|gwp", "promo|selectscurated", "promo|selectsnew", "promo|content"], "lifecycle": ["lifecycle|pricedrop_alert", "lifecycle|d2m_welcome", "lifecycle|member_activation", "lifecycle|triggerednewitemsv1", "lifecycle|parent_series"], "transactional": ["transactional|autoship2", "transactional|shipconfirmation", "transactional|orderconfirmation", "transactional|orderdelivered", "transactional|membership_charge"]};
+
+// ============================================================
+// HELPERS
+// ============================================================
+function fmtN(v){ return v==null?'—':Math.round(v).toLocaleString(); }
+function fmtD(v){ return v==null?'—':v.toLocaleString(); }
+function fmtPct(v,dp=2){ return v==null?'—':(v*100).toFixed(dp)+'%'; }
+function fmtDollar(v){ return v==null?'—':'$'+Math.round(v).toLocaleString(); }
+function fmtDollarDec(v){ return v==null?'—':'$'+v.toFixed(2); }
+
+function deltaClass(v, lowerBetter=false){
+  if(v===null||isNaN(v)) return 'neu';
+  if(lowerBetter) return v<0?'up':'dn';
+  return v>0?'up':'dn';
+}
+
+function deltaBadge(v, label, lowerBetter=false, isBp=false){
+  if(v===null||isNaN(v)) return '';
+  const cls = deltaClass(v,lowerBetter);
+  const sign = v>=0?'+':'';
+  const txt = isBp ? sign+v.toFixed(1)+'bp' : sign+(v*100).toFixed(1)+'%';
+  return `<span class="delta ${cls}">${label} ${txt}</span>`;
+}
+
+function deltaVal(curr,prev,isBp=false){
+  if(!prev||prev===0) return null;
+  if(isBp) return (curr-prev)*10000; // rate difference in basis points  
+  return (curr-prev)/prev;
+}
+
+function getRow(dimData, key, mIdx){ return dimData[key]?dimData[key][mIdx]:null; }
+
+function sumRows(rows){
+  // rows: array of [D,C,O,R,X]
+  return rows.reduce((acc,r)=>{
+    for(let i=0;i<5;i++) acc[i]+=(r[i]||0);
+    return acc;
+  },[0,0,0,0,0]);
+}
+
+function getMonthTotal(mIdx, sources=null){
+  // Returns [D,C,O,R,X] for given month, filtered by sources
+  const srcs = sources && sources.length>0 ? sources : ['promo','lifecycle','transactional'];
+  const rows = srcs.map(s=>utmData[s][mIdx]);
+  return sumRows(rows);
+}
+
+function computeMetrics(row){
+  const [D,C,O,R,X] = row;
+  return {
+    D, C, O, R, X,
+    ctr: D>0?C/D:0,
+    cvr: D>0?O/D:0,
+    aov: O>0?R/O:0,
+    optPct: D>0?X/D:0
+  };
+}
+
+// ============================================================
+// STATE
+// ============================================================
+let currentMonth = 15;
+let currentSources = [];
+let currentTabId = 'summary';
+const segmentState = {};   // tabId -> currently selected key
+let currentCampKeys = [];    // full keys for whichever source is active in campaign tab
+
+// ============================================================
+// TAB SWITCHING
+// ============================================================
+function showTab(name){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  const btn = document.querySelector('.tab-btn[data-tab="'+name+'"]');
+  if(btn) btn.classList.add('active');
+  currentTabId = name;
+  refreshTilesForCurrentTab();
+}
+
+// ============================================================
+// TILES
+// ============================================================
+function renderTiles(curr, prev, pyear){
+  const mc = computeMetrics(curr);
+  const mp = prev?computeMetrics(prev):null;
+  const my = pyear?computeMetrics(pyear):null;
+
+  function setTile(id, val, mom, yoy, fmt, isBp, lowerBetter){
+    document.getElementById('t-'+id).textContent = fmt(val);
+    const dc = document.getElementById('td-'+id);
+    dc.innerHTML = (mom!==null?deltaBadge(mom,'MoM',lowerBetter,isBp):'') +
+                   (yoy!==null?deltaBadge(yoy,'YoY',lowerBetter,isBp):'');
+  }
+  setTile('del', mc.D, mp?deltaVal(mc.D,mp.D):null, my?deltaVal(mc.D,my.D):null, fmtD, false, false);
+  setTile('ctr', mc.ctr, mp?deltaVal(mc.ctr,mp.ctr,true):null, my?deltaVal(mc.ctr,my.ctr,true):null, v=>fmtPct(v), true, false);
+  setTile('cvr', mc.cvr, mp?deltaVal(mc.cvr,mp.cvr,true):null, my?deltaVal(mc.cvr,my.cvr,true):null, v=>fmtPct(v), true, false);
+  setTile('rev', mc.R, mp?deltaVal(mc.R,mp.R):null, my?deltaVal(mc.R,my.R):null, fmtDollar, false, false);
+  setTile('aov', mc.aov, mp?(mc.aov-mp.aov):null, my?(mc.aov-my.aov):null, fmtDollarDec, false, false);
+  setTile('opt', mc.optPct, mp?deltaVal(mc.optPct,mp.optPct,true):null, my?deltaVal(mc.optPct,my.optPct,true):null, v=>fmtPct(v,3), true, true);
+}
+
+function updateTiles(){
+  const m = currentMonth;
+  const pm = m>0?m-1:null;
+  const pym = m>=12?m-12:null;
+  const srcs = currentSources.length>0?currentSources:null;
+  renderTiles(
+    getMonthTotal(m, srcs),
+    pm!==null?getMonthTotal(pm, srcs):null,
+    pym!==null?getMonthTotal(pym, srcs):null
+  );
+}
+
+function updateTilesForSegment(data, key){
+  const m = currentMonth;
+  const pm = m>0?m-1:null;
+  const pym = m>=12?m-12:null;
+  renderTiles(
+    (data[key]?data[key][m]:[0,0,0,0,0]),
+    (pm!==null&&data[key])?data[key][pm]:null,
+    (pym!==null&&data[key])?data[key][pym]:null
+  );
+}
+
+function refreshTilesForCurrentTab(){
+  const dimMap = {
+    'audience':  audienceData,
+    'aud_exp':   audExpData,
+    'autoship':  autoshipData,
+    'parent':    parentData,
+    'dslo':      lapsedData,
+    'dslo_det':  dsloDetData,
+    'utm_src':   utmData,
+    'campaign':  campaignsData
+  };
+  const data = dimMap[currentTabId];
+  const key  = segmentState[currentTabId];
+  if(data && key && data[key]) {
+    updateTilesForSegment(data, key);
+  } else {
+    updateTiles();
+  }
+}
+
+// ============================================================
+// DIMENSION TABLE BUILDER
+// ============================================================
+function buildDimTable(dimData, dimOrder, m, container){
+  const pm = m>0?m-1:null;
+  const pyy = m>=12?m-12:null;
+  const currTotRow = [0,0,0,0,0];
+  dimOrder.forEach(k=>{
+    const r = dimData[k]?dimData[k][m]:[0,0,0,0,0];
+    for(let i=0;i<5;i++) currTotRow[i]+=r[i];
+  });
+
+  const mLabel = MONTHS[m];
+  const pmLabel = pm!==null?MONTHS[pm]:'—';
+  const pyyLabel = pyy!==null?MONTHS[pyy]:'—';
+
+  let html = `<table class="dim-table">
+<thead><tr>
+<th style="background:#555">Metric</th>
+<th style="background:#3D6B65">${mLabel}</th>
+<th style="background:#3D6B65">${pmLabel}</th>
+<th style="background:#2a4d49">${pyyLabel}</th>
+<th style="background:#2d5a2d">MoM Δ</th>
+<th style="background:#1e3f1e">YoY Δ</th>
+</tr></thead><tbody>`;
+
+  dimOrder.forEach(dimKey=>{
+    const rC = dimData[dimKey]?dimData[dimKey][m]:[0,0,0,0,0];
+    const rP = (pm!==null&&dimData[dimKey])?dimData[dimKey][pm]:[0,0,0,0,0];
+    const rY = (pyy!==null&&dimData[dimKey])?dimData[dimKey][pyy]:[0,0,0,0,0];
+    const volWt = currTotRow[0]>0?(rC[0]/currTotRow[0]):0;
+
+    html += `<tr class="section-hdr"><td colspan="6">${dimKey}</td></tr>`;
+    html += `<tr class="vol-wt"><td>Delivered Volume Weight</td><td>${(volWt*100).toFixed(1)}%</td><td colspan="4"></td></tr>`;
+
+    const metrics = [
+      ['Delivered', v=>fmtD(v), r=>[r[0]], false, false],
+      ['Unique CTR', v=>fmtPct(v), r=>[r[0]>0?r[1]/r[0]:0], true, false],
+      ['Purchase CVR', v=>fmtPct(v), r=>[r[0]>0?r[2]/r[0]:0], true, false],
+      ['Revenue', v=>fmtDollar(v), r=>[r[3]], false, false],
+      ['AOV', v=>fmtDollarDec(v), r=>[r[2]>0?r[3]/r[2]:0], false, false],
+      ['Opt-out %', v=>fmtPct(v,3), r=>[r[0]>0?r[4]/r[0]:0], true, true],
+    ];
+
+    metrics.forEach(([label, fmt, getVal, isBp, lowerBetter])=>{
+      const vc = getVal(rC)[0];
+      const vp = getVal(rP)[0];
+      const vy = getVal(rY)[0];
+      const momDelta = (pm!==null&&vp!==0)?(isBp?(vc-vp)*10000:(vc-vp)/vp):null;
+      const yoyDelta = (pyy!==null&&vy!==0)?(isBp?(vc-vy)*10000:(vc-vy)/vy):null;
+
+      const momCls = momDelta!==null?(lowerBetter?(momDelta<0?'good':'bad'):(momDelta>0?'good':'bad')):'';
+      const yoyCls = yoyDelta!==null?(lowerBetter?(yoyDelta<0?'good':'bad'):(yoyDelta>0?'good':'bad')):'';
+      const momTxt = momDelta!==null?(isBp?(momDelta>=0?'+':'')+momDelta.toFixed(1)+'bp':(momDelta>=0?'+':'')+(momDelta*100).toFixed(1)+'%'):'—';
+      const yoyTxt = yoyDelta!==null?(isBp?(yoyDelta>=0?'+':'')+yoyDelta.toFixed(1)+'bp':(yoyDelta>=0?'+':'')+(yoyDelta*100).toFixed(1)+'%'):'—';
+
+      html += `<tr class="sub"><td>${label}</td><td>${fmt(vc)}</td><td>${pm!==null?fmt(vp):'—'}</td><td>${pyy!==null?fmt(vy):'—'}</td><td class="${momCls}">${momTxt}</td><td class="${yoyCls}">${yoyTxt}</td></tr>`;
+    });
+  });
+
+  html += '</tbody></table>';
+  container.innerHTML = html;
+}
+
+// ============================================================
+// SUMMARY TABLE
+// ============================================================
+function buildSummaryTable(m){
+  const pm = m>0?m-1:null;
+  const pyy = m>=12?m-12:null;
+  const mLabel = MONTHS[m];
+  const pmLabel = pm!==null?MONTHS[pm]:'—';
+  const pyyLabel = pyy!==null?MONTHS[pyy]:'—';
+
+  const sources = ['promo','lifecycle','transactional'];
+  let html = `<table class="dim-table"><thead><tr>
+<th style="background:#555">Source</th>
+<th style="background:#3D6B65">${mLabel}</th>
+<th style="background:#3D6B65">${pmLabel}</th>
+<th style="background:#2a4d49">${pyyLabel}</th>
+<th style="background:#2d5a2d">MoM Δ</th>
+<th style="background:#1e3f1e">YoY Δ</th>
+</tr></thead><tbody>`;
+
+  const allSrcs = [...sources, 'total'];
+  allSrcs.forEach(src=>{
+    const rC = src==='total'?getMonthTotal(m):utmData[src][m];
+    const rP = pm!==null?(src==='total'?getMonthTotal(pm):utmData[src][pm]):[0,0,0,0,0];
+    const rY = pyy!==null?(src==='total'?getMonthTotal(pyy):utmData[src][pyy]):[0,0,0,0,0];
+    const mc_ = computeMetrics(rC), mp_ = computeMetrics(rP), my_ = computeMetrics(rY);
+
+    const label = src==='total'?'<b>TOTAL</b>':src;
+    const bg = src==='total'?'style="background:#e8eef5;font-weight:bold"':'';
+    html += `<tr class="section-hdr"><td colspan="6" ${bg}>${label.toUpperCase()}</td></tr>`;
+
+    const metrics = [
+      ['Delivered', fmtD, r=>r.D, false, false],
+      ['Unique CTR', v=>fmtPct(v), r=>r.ctr, true, false],
+      ['Purchase CVR', v=>fmtPct(v), r=>r.cvr, true, false],
+      ['Revenue', fmtDollar, r=>r.R, false, false],
+      ['AOV', fmtDollarDec, r=>r.aov, false, false],
+      ['Opt-out %', v=>fmtPct(v,3), r=>r.optPct, true, true],
+    ];
+
+    metrics.forEach(([lbl,fmt,getVal,isBp,lowerBetter])=>{
+      const vc=getVal(mc_), vp=getVal(mp_), vy=getVal(my_);
+      const mom=(pm!==null&&vp!==0)?(isBp?(vc-vp)*10000:(vc-vp)/vp):null;
+      const yoy=(pyy!==null&&vy!==0)?(isBp?(vc-vy)*10000:(vc-vy)/vy):null;
+      const mc2=mom!==null?(lowerBetter?(mom<0?'good':'bad'):(mom>0?'good':'bad')):'';
+      const yc2=yoy!==null?(lowerBetter?(yoy<0?'good':'bad'):(yoy>0?'good':'bad')):'';
+      const mt=mom!==null?(isBp?(mom>=0?'+':'')+mom.toFixed(1)+'bp':(mom>=0?'+':'')+(mom*100).toFixed(1)+'%'):'—';
+      const yt=yoy!==null?(isBp?(yoy>=0?'+':'')+yoy.toFixed(1)+'bp':(yoy>=0?'+':'')+(yoy*100).toFixed(1)+'%'):'—';
+      html += `<tr class="sub"><td>${lbl}</td><td>${fmt(vc)}</td><td>${pm!==null?fmt(vp):'—'}</td><td>${pyy!==null?fmt(vy):'—'}</td><td class="${mc2}">${mt}</td><td class="${yc2}">${yt}</td></tr>`;
+    });
+  });
+  html += '</tbody></table>';
+  document.getElementById('summary-table-wrap').innerHTML = html;
+}
+
+// ============================================================
+// CAMPAIGN TABLE
+// ============================================================
+function buildCampaignTable(){
+  // Cols: Apr 2025, Mar 2026, Apr 2026, MoM Δ, YoY Δ
+  let html = `<table class="dim-table"><thead><tr>
+<th style="background:#555">Campaign</th>
+<th style="background:#3D6B65">Apr 2026</th>
+<th style="background:#3D6B65">Mar 2026</th>
+<th style="background:#2a4d49">Apr 2025</th>
+<th style="background:#2d5a2d">MoM Δ</th>
+<th style="background:#1e3f1e">YoY Δ</th>
+</tr></thead><tbody>`;
+
+  // Compute totals per 3 months
+  const totals = [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]];
+  campaignData.forEach(([name,py,pm,cur])=>{
+    [py,pm,cur].forEach((r,i)=>{for(let j=0;j<5;j++) totals[i][j]+=r[j];});
+  });
+
+  // Sort by Apr 2026 delivered desc
+  const sorted = [...campaignData].sort((a,b)=>b[3][0]-a[3][0]);
+  sorted.forEach(([name,py,pm,cur])=>{
+    if(cur[0]<5000) return; // skip tiny campaigns
+    const mc=computeMetrics(cur),mp_=computeMetrics(pm),my_=computeMetrics(py);
+    html += `<tr class="section-hdr"><td colspan="6">${name}</td></tr>`;
+    const volWt = totals[2][0]>0?cur[0]/totals[2][0]:0;
+    html += `<tr class="vol-wt"><td>Vol Weight (Apr 2026)</td><td>${(volWt*100).toFixed(1)}%</td><td colspan="4"></td></tr>`;
+    
+    const metrics = [
+      ['Delivered', fmtD, r=>r.D, false, false],
+      ['Unique CTR', v=>fmtPct(v), r=>r.ctr, true, false],
+      ['Purchase CVR', v=>fmtPct(v), r=>r.cvr, true, false],
+      ['Revenue', fmtDollar, r=>r.R, false, false],
+      ['AOV', fmtDollarDec, r=>r.aov, false, false],
+      ['Opt-out %', v=>fmtPct(v,3), r=>r.optPct, true, true],
+    ];
+    metrics.forEach(([lbl,fmt,getVal,isBp,lower])=>{
+      const vc=getVal(mc),vp=getVal(mp_),vy=getVal(my_);
+      const mom=vp!==0?(isBp?(vc-vp)*10000:(vc-vp)/vp):null;
+      const yoy=vy!==0?(isBp?(vc-vy)*10000:(vc-vy)/vy):null;
+      const mc2=mom!==null?(lower?(mom<0?'good':'bad'):(mom>0?'good':'bad')):'';
+      const yc2=yoy!==null?(lower?(yoy<0?'good':'bad'):(yoy>0?'good':'bad')):'';
+      const mt=mom!==null?(isBp?(mom>=0?'+':'')+mom.toFixed(1)+'bp':(mom>=0?'+':'')+(mom*100).toFixed(1)+'%'):'—';
+      const yt=yoy!==null?(isBp?(yoy>=0?'+':'')+yoy.toFixed(1)+'bp':(yoy>=0?'+':'')+(yoy*100).toFixed(1)+'%'):'—';
+      html+=`<tr class="sub"><td>${lbl}</td><td>${fmt(vc)}</td><td>${fmt(vp)}</td><td>${fmt(vy)}</td><td class="${mc2}">${mt}</td><td class="${yc2}">${yt}</td></tr>`;
+    });
+  });
+  html += '</tbody></table>';
+  document.getElementById('tbl-campaign').innerHTML = html;
+}
+
+// ============================================================
+// COHORT TABLE
+// ============================================================
+function buildCohortTable(){
+  // cohortData[key] = [[Apr2025], [Mar2026], [Apr2026]]
+  const cohortOrder = ['2026','2025','2024','2023','2022','2021','2020','2019 & older','N/A'];
+  const totals = [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]];
+  cohortOrder.forEach(k=>{
+    if(cohortData[k]){
+      cohortData[k].forEach((r,i)=>{for(let j=0;j<5;j++) totals[i][j]+=r[j];});
+    }
+  });
+
+  let html = `<table class="dim-table"><thead><tr>
+<th style="background:#555">Metric</th>
+<th style="background:#3D6B65">Apr 2026</th>
+<th style="background:#3D6B65">Mar 2026</th>
+<th style="background:#2a4d49">Apr 2025</th>
+<th style="background:#2d5a2d">MoM Δ</th>
+<th style="background:#1e3f1e">YoY Δ</th>
+</tr></thead><tbody>`;
+
+  cohortOrder.forEach(k=>{
+    if(!cohortData[k]) return;
+    const [py,pm_,cur] = cohortData[k];
+    const mc_=computeMetrics(cur), mp2=computeMetrics(pm_), my2=computeMetrics(py);
+    const volWt = totals[2][0]>0?cur[0]/totals[2][0]:0;
+    html += `<tr class="section-hdr"><td colspan="6">Cohort: ${k}</td></tr>`;
+    html += `<tr class="vol-wt"><td>Vol Weight (Apr 2026)</td><td>${(volWt*100).toFixed(1)}%</td><td colspan="4"></td></tr>`;
+    
+    const metrics = [
+      ['Delivered', fmtD, r=>r.D, false, false],
+      ['Unique CTR', v=>fmtPct(v), r=>r.ctr, true, false],
+      ['Purchase CVR', v=>fmtPct(v), r=>r.cvr, true, false],
+      ['Revenue', fmtDollar, r=>r.R, false, false],
+      ['AOV', fmtDollarDec, r=>r.aov, false, false],
+      ['Opt-out %', v=>fmtPct(v,3), r=>r.optPct, true, true],
+    ];
+    metrics.forEach(([lbl,fmt,getVal,isBp,lower])=>{
+      const vc=getVal(mc_),vp=getVal(mp2),vy=getVal(my2);
+      const isNew = k==='2026' && vy===0; // cohort didn't exist in prior year
+      const mom=vp!==0?(isBp?(vc-vp)*10000:(vc-vp)/vp):null;
+      const yoy=(!isNew&&vy!==0)?(isBp?(vc-vy)*10000:(vc-vy)/vy):null;
+      const mc2=mom!==null?(lower?(mom<0?'good':'bad'):(mom>0?'good':'bad')):'';
+      const yc2=yoy!==null?(lower?(yoy<0?'good':'bad'):(yoy>0?'good':'bad')):'';
+      const mt=mom!==null?(isBp?(mom>=0?'+':'')+mom.toFixed(1)+'bp':(mom>=0?'+':'')+(mom*100).toFixed(1)+'%'):'—';
+      const yt=yoy!==null?(isBp?(yoy>=0?'+':'')+yoy.toFixed(1)+'bp':(yoy>=0?'+':'')+(yoy*100).toFixed(1)+'%'):'—';
+      html+=`<tr class="sub"><td>${lbl}</td><td>${fmt(vc)}</td><td>${fmt(vp)}</td><td>${isNew?'N/A (new)':fmt(vy)}</td><td class="${mc2}">${mt}</td><td class="${yc2}">${yt}</td></tr>`;
+    });
+  });
+  html += '</tbody></table>';
+  document.getElementById('tbl-cohort').innerHTML = html;
+}
+
+// ============================================================
+// PILLS
+// ============================================================
+function buildPills(tabId, keys, containerId, onSelect){
+  const strip = document.getElementById(containerId);
+  strip.innerHTML = '';
+  keys.forEach((k,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'pill'+(i===0?' active':'');
+    btn.textContent = k;
+    btn.onclick = function(){
+      strip.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+      this.classList.add('active');
+      if(onSelect) onSelect(k);
+    };
+    strip.appendChild(btn);
+  });
+}
+
+function setCampaignSource(src, btn){
+  document.querySelectorAll('.src-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const keys = campaignSourceKeys[src] || [];
+  const shortKeys = keys.map(k=>k.split('|')[1]);  // display name = part after |
+  // rebuild pills with short display names but use full key for data lookup
+  const strip = document.getElementById('pills-campaign');
+  strip.innerHTML = '';
+  keys.forEach((fullKey,i)=>{
+    const label = fullKey.split('|')[1];
+    const btn2 = document.createElement('button');
+    btn2.className = 'pill'+(i===0?' active':'');
+    btn2.textContent = label;
+    btn2.onclick = function(){
+      strip.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+      this.classList.add('active');
+      segmentState['campaign'] = fullKey;
+      buildDimTable(campaignsData, keys, currentMonth, document.getElementById('tbl-campaign'));
+      buildDimCharts(campaignsData, fullKey, 'campaign');
+      if(currentTabId==='campaign') updateTilesForSegment(campaignsData, fullKey);
+    };
+    strip.appendChild(btn2);
+  });
+  // Render initial state (first campaign in this source)
+  currentCampKeys = keys;
+  if(keys.length>0){
+    const firstKey = keys[0];
+    segmentState['campaign'] = firstKey;
+    buildDimTable(campaignsData, keys, currentMonth, document.getElementById('tbl-campaign'));
+    buildDimCharts(campaignsData, firstKey, 'campaign');
+    if(currentTabId==='campaign') updateTilesForSegment(campaignsData, firstKey);
+  }
+}
+
+function scrollToSection(tableId, key){
+  const wrap = document.getElementById('tbl-'+tableId);
+  if(!wrap) return;
+  const rows = wrap.querySelectorAll('tr.section-hdr');
+  for(const row of rows){
+    if(row.textContent.trim().includes(key)){
+      row.scrollIntoView({behavior:'smooth',block:'nearest'});
+      break;
+    }
+  }
+}
+
+// ============================================================
+// CHARTS
+// ============================================================
+let charts = {};
+
+function makeChart(id, type, labels, data, color, yFmt){
+  const ctx = document.getElementById(id);
+  if(!ctx) return;
+  if(charts[id]) charts[id].destroy();
+  charts[id] = new Chart(ctx,{
+    type:type,
+    data:{labels:MONTHS, datasets:[{label:'',data:data,backgroundColor:color+'33',borderColor:color,borderWidth:1.5,pointRadius:2,fill:type==='bar'}]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{
+        x:{ticks:{font:{size:9},maxRotation:45}},
+        y:{ticks:{font:{size:9}, callback:function(v){return yFmt(v);}}}
+      }
+    }
+  });
+}
+
+function buildCharts(){
+  // Compute totals for all 16 months
+  const dels=[],ctrs=[],cvrs=[],opts=[];
+  for(let m=0;m<16;m++){
+    const [D,C,O,R,X]=getMonthTotal(m);
+    dels.push(D);
+    ctrs.push(D>0?(C/D*100):0);
+    cvrs.push(D>0?(O/D*100):0);
+    opts.push(D>0?(X/D*100):0);
+  }
+  makeChart('ch-del','bar',MONTHS,dels,'#3D6B65',v=>v>=1e6?(v/1e6).toFixed(1)+'M':v.toLocaleString());
+  makeChart('ch-ctr','line',MONTHS,ctrs,'#27ae60',v=>v.toFixed(2)+'%');
+  makeChart('ch-cvr','line',MONTHS,cvrs,'#e67e22',v=>v.toFixed(3)+'%');
+  makeChart('ch-opt','line',MONTHS,opts,'#e74c3c',v=>v.toFixed(4)+'%');
+}
+
+function buildDimCharts(data, key, tabId){
+  if(!data || !data[key]) return;
+  const dels=[],ctrs=[],cvrs=[],opts=[];
+  for(let m=0;m<16;m++){
+    const row=data[key][m]||[0,0,0,0,0];
+    const [D,C,O,R,X]=row;
+    dels.push(D);
+    ctrs.push(D>0?(C/D*100):0);
+    cvrs.push(D>0?(O/D*100):0);
+    opts.push(D>0?(X/D*100):0);
+  }
+  const pfx='ch-'+tabId+'-';
+  makeChart(pfx+'del','bar',MONTHS,dels,'#3D6B65',v=>v>=1e6?(v/1e6).toFixed(1)+'M':v.toLocaleString());
+  makeChart(pfx+'ctr','line',MONTHS,ctrs,'#27ae60',v=>v.toFixed(2)+'%');
+  makeChart(pfx+'cvr','line',MONTHS,cvrs,'#e67e22',v=>v.toFixed(3)+'%');
+  makeChart(pfx+'opt','line',MONTHS,opts,'#e74c3c',v=>v.toFixed(4)+'%');
+}
+
+// ============================================================
+// EXEC SUMMARY
+// ============================================================
+function buildExecSummary(){
+  const html = `
+<h2>April 2026 - At a Glance</h2>
+
+<p>April 2026: 42.2M emails delivered (-6.1% MoM, -7.9% YoY), blended CTR of 1.44% (-0.02pp MoM, +0.04pp YoY), purchase CVR of 0.1216% (+0.01pp MoM, -0.01pp YoY), and revenue of $4.86M (-1.6% MoM, -16.0% YoY). The blended opt-out rate was 0.0129% (-0.0008pp MoM, -0.0068pp YoY).</p>
+
+<h2>What to Watch</h2>
+
+<p><strong>Total delivered fell -7.9% YoY and -6.1% MoM; the MoM decline is seasonal and the YoY decline is primarily driven by promo.</strong> Total delivered fell -6.1% MoM to 42.2M, consistent with the prior-year March-to-April seasonal pattern (2025: -8.3%); no action needed on the MoM decline. Promo (79% of sends) fell -9.8% YoY and accounts for virtually all of the YoY decline; lifecycle was up +3.3% YoY and transactional was -4.1% YoY. Within promo, the decline reflects audience list contraction in newer member cohorts: current-year and Year 1 cohort promo sends are down -40.6% and -26.5% YoY respectively, partially offset by Year 2+ growth as the large 2024 cohort aged in.</p>
+
+<p><strong>Blended CTR is up +0.04pp YoY, but this is promo-driven; lifecycle CTR and CVR have declined for three consecutive months.</strong> The blended CTR improvement reflects promo (+0.16pp YoY) offsetting a lifecycle decline (-0.20pp YoY). Lifecycle CTR has been below prior year each month of 2026 (February: -0.31pp, March: -0.28pp, April: -0.20pp YoY), and CVR has followed the same pattern (-0.06pp, -0.03pp, -0.04pp YoY). Within lifecycle, d2m_welcome (5% of lifecycle sends, CTR 5.20%) accounts for 0.14pp of the -0.20pp lifecycle CTR gap; its CTR fell -1.02pp YoY and its share of lifecycle sends contracted from 6.5% to 5.1%. CVR decline was seen across all audiences in lifecycle type emails. See Actions: Priority 1.</p>
+
+<p><strong>Shipconfirmation is driving a persistent three-month decline in transactional CTR.</strong> Transactional blended CTR fell -1.12pp YoY to 7.52%, driven by shipconfirmation (16% of transactional sends), where CTR fell -1.49pp YoY to 9.98%. The same YoY gap appeared in February (-1.22pp) and March (-0.61pp). No product or attribution change affecting this campaign has been identified, and shipconfirmation normally carries high CTR as members click to track shipments. See Actions: Priority 2.</p>
+
+<p><strong>Revenue fell -16.0% YoY, largely explained by a known product change to the transactional OTP campaign.</strong> Total revenue was $4.86M, crossing the notable threshold. Transactional revenue accounts for the bulk of the YoY decline and is fully explained by thrive_account_code_confirmation: the Q3 2025 product update added manual code entry to the one-time password email, permanently reducing email-attributed clicks and orders on that campaign. Promo revenue was flat YoY (+0.5%). Lifecycle revenue fell -23.7% YoY on the CVR compression noted above.</p>
+
+<p><strong>The blended opt-out rate improved -0.0068pp YoY, driven by promo.</strong> The blended opt-out rate was 0.0129%, crossing the notable threshold in the positive direction. Promo accounts for most of the movement: its opt-out rate fell -0.0080pp YoY from 0.0188% to 0.0108%.</p>
+
+<p>See the <a href="#" onclick="showTab('actions');return false;">Actions tab</a> for prioritized next steps on lifecycle engagement and shipconfirmation CTR.</p>`;
+  document.getElementById('exec-content').innerHTML = html;
+}
+
+// ============================================================
+// ACTIONS
+// ============================================================
+function buildActions(){
+  const actions = [
+    {
+      rank:1, tag:'structural', title:'Lifecycle CTR and CVR Below Prior Year Three Months Running',
+      action:'Deep dive d2m_welcome CTR and CVR performance; compare content and any offer changes against last year.',
+      context:'Lifecycle CTR has been below prior year each month of 2026, with d2m_welcome (5% of sends, CTR 5.20%) accounting for approximately 0.14pp of the -0.20pp April YoY gap. CVR has followed the same pattern across all audience segments in lifecycle sends, indicating the gap extends beyond d2m_welcome alone.'
+    },
+    {
+      rank:2, tag:'monitor', title:'Shipconfirmation CTR Declining Three Months Running',
+      action:'Investigate whether any content changes to the shipconfirmation email between January and March 2026 explain the persistent CTR decline.',
+      context:'Transactional CTR is down -1.12pp YoY, with shipconfirmation (16% of transactional sends) as the primary driver (CTR down -1.49pp YoY). The gap has persisted across February, March, and April; no attribution or product change affecting this campaign has been identified.'
+    },
+    {
+      rank:3, tag:'monitor', title:'Promo CTR Up +0.16pp YoY — Driver Not Yet Identified',
+      action:'Identify what changed in bpo and gwp content or offer strategy between Apr 2025 and Apr 2026 to determine whether the per-campaign CTR improvement is repeatable.',
+      context:'Promo CTR improved +0.16pp YoY to 0.76%, against a backdrop of -9.8% volume decline. Approximately +0.05pp of the gain is attributable to campaign mix shift (selectscurated and content shrank from 27% to 7% of promo sends, both low-CTR campaigns). The remaining +0.10pp reflects genuine per-campaign rate improvement in bpo (+0.11pp) and gwp (+0.11pp), confirmed by per-cohort CTR data showing improvement across all tenure cohorts YoY. The driver of the bpo and gwp rate improvement has not been identified.'
+    },
+    {
+      rank:4, tag:'context', title:'Promo Volume -9.8% YoY; Decline Concentrated in Newer Member Cohorts',
+      action:'No action required on volume; per-send performance has held. Monitor whether current-year (2026) cohort send volume builds over coming months consistent with prior-year acquisition patterns.',
+      context:'Promo delivered was 33.3M (-9.8% YoY), driven by list contraction in newer cohorts: current-year (2026 cohort) sends are down -40.6% YoY and Year 1 (2025 cohort) sends are down -26.5% YoY. Year 2+ grew +14.5% as the large 2024 cohort aged in. Promo CTR and revenue are both flat to positive YoY; per-send performance has held.'
+    },
+    {
+      rank:5, tag:'seasonal', title:'April MoM Delivered Decline Within Seasonal Range',
+      action:'No action required; monitor May 2026 against the prior-year May pattern.',
+      context:'Total delivered across all utm sources fell -6.1% MoM to 42.2M, and revenue fell -1.6% MoM, both consistent with the prior-year March-to-April seasonal pattern (total delivered: -8.3% MoM in 2025).'
+    },
+    {
+      rank:6, tag:'context', title:'Transactional CVR and Revenue Decline Explained',
+      action:'Re-baseline transactional CVR and revenue trend lines to exclude thrive_account_code_confirmation going forward.',
+      context:'Transactional CVR (0.484%, -0.19pp YoY) and revenue (-29.2% YoY) declines are driven by thrive_account_code_confirmation, where a Q3 2025 product update replaced click-to-authenticate with manual code entry, permanently reducing email-attributed orders. The remaining campaigns excluding shipconfirmation are within threshold on CVR (+0.01pp YoY) and revenue (+0.2% YoY) in aggregate.'
+    }
+  ];
+
+  let html = '<p style="font-size:11px;color:#888;margin-bottom:12px">Actions ordered by volume weight × structural severity. STRUCTURAL = sustained deviation >2 SD from 6-month mean. SEASONAL = within normal range for this calendar month.</p>';
+  actions.forEach(a=>{
+    html += `<div class="action-card ${a.tag}">
+<div class="action-rank">Priority ${a.rank}</div>
+<span class="action-tag ${a.tag}">${a.tag.toUpperCase()}</span>
+<div class="action-title">${a.title}</div>
+<div class="action-body"><strong>Action item:</strong> ${a.action}</div>
+<div class="action-context"><span class="action-context-label">Context:</span> ${a.context}</div>
+</div>`;
+  });
+  document.getElementById('actions-content').innerHTML = html;
+}
+
+// ============================================================
+// INIT
+// ============================================================
+function init(){
+  buildCharts();
+  updateTiles();
+  buildSummaryTable(currentMonth);
+
+  function makeSegCb(tabId, data){
+    return k=>{
+      segmentState[tabId]=k;
+      buildDimCharts(data, k, tabId);
+      if(currentTabId===tabId) updateTilesForSegment(data, k);
+    };
+  }
+
+  const audOrder = ['Onboarding (0-2 orders)','Habit Formation (3-7 orders)','Power Members (8+ orders)'];
+  segmentState['audience'] = audOrder[0];
+  buildPills('audience', audOrder, 'pills-audience', makeSegCb('audience', audienceData));
+  buildDimTable(audienceData, audOrder, currentMonth, document.getElementById('tbl-audience'));
+  buildDimCharts(audienceData, audOrder[0], 'audience');
+
+  const audExpOrder = ['Onboarding (0-2 orders)','Habit Formation (3-7 orders)','Power Members (8-20 orders)','Top Tier (20+ orders)'];
+  segmentState['aud_exp'] = audExpOrder[0];
+  buildPills('aud_exp', audExpOrder, 'pills-aud_exp', makeSegCb('aud_exp', audExpData));
+  buildDimTable(audExpData, audExpOrder, currentMonth, document.getElementById('tbl-aud_exp'));
+  buildDimCharts(audExpData, audExpOrder[0], 'aud_exp');
+
+  const autoOrder = ['Active','Active (no subscribed items)','Cancelled','Inactive','Paused'];
+  segmentState['autoship'] = autoOrder[0];
+  buildPills('autoship', autoOrder, 'pills-autoship', makeSegCb('autoship', autoshipData));
+  buildDimTable(autoshipData, autoOrder, currentMonth, document.getElementById('tbl-autoship'));
+  buildDimCharts(autoshipData, autoOrder[0], 'autoship');
+
+  const parOrder = ['Yes','No','Unknown'];
+  segmentState['parent'] = parOrder[0];
+  buildPills('parent', parOrder, 'pills-parent', makeSegCb('parent', parentData));
+  buildDimTable(parentData, parOrder, currentMonth, document.getElementById('tbl-parent'));
+  buildDimCharts(parentData, parOrder[0], 'parent');
+
+  const lapOrder = ['No Checkouts','0 - 30','31 - 60','61 - 90','91 - 120','121+'];
+  segmentState['dslo'] = lapOrder[0];
+  buildPills('dslo', lapOrder, 'pills-dslo', makeSegCb('dslo', lapsedData));
+  buildDimTable(lapsedData, lapOrder, currentMonth, document.getElementById('tbl-dslo'));
+  buildDimCharts(lapsedData, lapOrder[0], 'dslo');
+
+  const detOrder = ['1','2','3','4','5','6','7','8-14','15-30','31-60','61-90','91-120','121+','No Checkouts'];
+  segmentState['dslo_det'] = detOrder[0];
+  buildPills('dslo_det', detOrder, 'pills-dslo_det', makeSegCb('dslo_det', dsloDetData));
+  buildDimTable(dsloDetData, detOrder, currentMonth, document.getElementById('tbl-dslo_det'));
+  buildDimCharts(dsloDetData, detOrder[0], 'dslo_det');
+
+  buildCohortTable();
+
+  const utmOrder = ['promo','lifecycle','transactional'];
+  segmentState['utm_src'] = utmOrder[0];
+  buildPills('utm_src', utmOrder, 'pills-utm_src', makeSegCb('utm_src', utmData));
+  buildDimTable(utmData, utmOrder, currentMonth, document.getElementById('tbl-utm_src'));
+  buildDimCharts(utmData, utmOrder[0], 'utm_src');
+
+  // Campaign tab: source-filtered
+  setCampaignSource('promo', document.getElementById('srcbtn-promo'));
+
+  buildExecSummary();
+  buildActions();
+
+  // Dimension filter dropdowns — navigate to tab + activate pill
+  function activatePill(containerId, value){
+    const strip = document.getElementById(containerId);
+    if(!strip) return;
+    strip.querySelectorAll('.pill').forEach(p=>{
+      p.classList.toggle('active', p.textContent.trim()===value);
+    });
+  }
+  function dimFilter(selectId, tabId, data, pillContainerId){
+    document.getElementById(selectId).addEventListener('change', function(){
+      const val = this.value;
+      if(!val) return;
+      showTab(tabId);
+      activatePill(pillContainerId, val);
+      segmentState[tabId] = val;
+      buildDimCharts(data, val, tabId);
+      updateTilesForSegment(data, val);
+    });
+  }
+  dimFilter('fAudience',  'audience',  audienceData,  'pills-audience');
+  dimFilter('fAutoship',  'autoship',  autoshipData,  'pills-autoship');
+  dimFilter('fParent',    'parent',    parentData,    'pills-parent');
+  dimFilter('fDSLO',      'dslo',      lapsedData,    'pills-dslo');
+
+  // Cohort filter — navigate to cohort tab (no pills)
+  document.getElementById('fCohort').addEventListener('change', function(){
+    if(this.value) showTab('cohort');
+  });
+
+  // UTM Campaign filter — activate source + campaign pill, navigate to campaign tab
+  document.getElementById('fCampaign').addEventListener('change', function(){
+    const fullKey = this.value;
+    if(!fullKey) return;
+    const src = fullKey.split('|')[0];
+    const srcBtnId = 'srcbtn-'+src;
+    showTab('campaign');
+    setCampaignSource(src, document.getElementById(srcBtnId));
+    // Activate the specific campaign pill
+    const strip = document.getElementById('pills-campaign');
+    const campLabel = fullKey.split('|')[1];
+    strip.querySelectorAll('.pill').forEach(p=>{
+      p.classList.toggle('active', p.textContent.trim()===campLabel);
+    });
+    segmentState['campaign'] = fullKey;
+    buildDimCharts(campaignsData, fullKey, 'campaign');
+    updateTilesForSegment(campaignsData, fullKey);
+  });
+
+  // Month selector
+  document.getElementById('fMonth').addEventListener('change', function(){
+    currentMonth = parseInt(this.value);
+    refreshTilesForCurrentTab();
+    buildSummaryTable(currentMonth);
+    buildDimTable(audienceData, audOrder, currentMonth, document.getElementById('tbl-audience'));
+    buildDimTable(audExpData, audExpOrder, currentMonth, document.getElementById('tbl-aud_exp'));
+    buildDimTable(autoshipData, autoOrder, currentMonth, document.getElementById('tbl-autoship'));
+    buildDimTable(parentData, parOrder, currentMonth, document.getElementById('tbl-parent'));
+    buildDimTable(lapsedData, lapOrder, currentMonth, document.getElementById('tbl-dslo'));
+    buildDimTable(dsloDetData, detOrder, currentMonth, document.getElementById('tbl-dslo_det'));
+    buildDimTable(utmData, utmOrder, currentMonth, document.getElementById('tbl-utm_src'));
+    if(currentCampKeys.length>0) buildDimTable(campaignsData, currentCampKeys, currentMonth, document.getElementById('tbl-campaign'));
+  });
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
