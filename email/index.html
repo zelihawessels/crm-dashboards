@@ -371,13 +371,13 @@ function deltaBadge(v, label, lowerBetter=false, isBp=false){
   if(v===null||isNaN(v)) return '';
   const cls = deltaClass(v,lowerBetter);
   const sign = v>=0?'+':'';
-  const txt = isBp ? sign+v.toFixed(1)+'bp' : sign+(v*100).toFixed(1)+'%';
+  const txt = isBp ? sign+v.toFixed(2)+'pp' : sign+(v*100).toFixed(1)+'%';
   return `<span class="delta ${cls}">${label} ${txt}</span>`;
 }
 
 function deltaVal(curr,prev,isBp=false){
   if(!prev||prev===0) return null;
-  if(isBp) return (curr-prev)*10000; // rate difference in basis points  
+  if(isBp) return (curr-prev)*100; // rate difference in percentage points
   return (curr-prev)/prev;
 }
 
@@ -544,13 +544,13 @@ function buildDimTable(dimData, dimOrder, m, container){
       const vc = getVal(rC)[0];
       const vp = getVal(rP)[0];
       const vy = getVal(rY)[0];
-      const momDelta = (pm!==null&&vp!==0)?(isBp?(vc-vp)*10000:(vc-vp)/vp):null;
-      const yoyDelta = (pyy!==null&&vy!==0)?(isBp?(vc-vy)*10000:(vc-vy)/vy):null;
+      const momDelta = (pm!==null&&vp!==0)?(isBp?(vc-vp)*100:(vc-vp)/vp):null;
+      const yoyDelta = (pyy!==null&&vy!==0)?(isBp?(vc-vy)*100:(vc-vy)/vy):null;
 
       const momCls = momDelta!==null?(lowerBetter?(momDelta<0?'good':'bad'):(momDelta>0?'good':'bad')):'';
       const yoyCls = yoyDelta!==null?(lowerBetter?(yoyDelta<0?'good':'bad'):(yoyDelta>0?'good':'bad')):'';
-      const momTxt = momDelta!==null?(isBp?(momDelta>=0?'+':'')+momDelta.toFixed(1)+'bp':(momDelta>=0?'+':'')+(momDelta*100).toFixed(1)+'%'):'—';
-      const yoyTxt = yoyDelta!==null?(isBp?(yoyDelta>=0?'+':'')+yoyDelta.toFixed(1)+'bp':(yoyDelta>=0?'+':'')+(yoyDelta*100).toFixed(1)+'%'):'—';
+      const momTxt = momDelta!==null?(isBp?(momDelta>=0?'+':'')+momDelta.toFixed(2)+'pp':(momDelta>=0?'+':'')+(momDelta*100).toFixed(1)+'%'):'—';
+      const yoyTxt = yoyDelta!==null?(isBp?(yoyDelta>=0?'+':'')+yoyDelta.toFixed(2)+'pp':(yoyDelta>=0?'+':'')+(yoyDelta*100).toFixed(1)+'%'):'—';
 
       html += `<tr class="sub"><td>${label}</td><td>${fmt(vc)}</td><td>${pm!==null?fmt(vp):'—'}</td><td>${pyy!==null?fmt(vy):'—'}</td><td class="${momCls}">${momTxt}</td><td class="${yoyCls}">${yoyTxt}</td></tr>`;
     });
@@ -606,8 +606,8 @@ function buildSummaryTable(m){
       const yoy=(pyy!==null&&vy!==0)?(isBp?(vc-vy)*10000:(vc-vy)/vy):null;
       const mc2=mom!==null?(lowerBetter?(mom<0?'good':'bad'):(mom>0?'good':'bad')):'';
       const yc2=yoy!==null?(lowerBetter?(yoy<0?'good':'bad'):(yoy>0?'good':'bad')):'';
-      const mt=mom!==null?(isBp?(mom>=0?'+':'')+mom.toFixed(1)+'bp':(mom>=0?'+':'')+(mom*100).toFixed(1)+'%'):'—';
-      const yt=yoy!==null?(isBp?(yoy>=0?'+':'')+yoy.toFixed(1)+'bp':(yoy>=0?'+':'')+(yoy*100).toFixed(1)+'%'):'—';
+      const mt=mom!==null?(isBp?(mom>=0?'+':'')+mom.toFixed(2)+'pp':(mom>=0?'+':'')+(mom*100).toFixed(1)+'%'):'—';
+      const yt=yoy!==null?(isBp?(yoy>=0?'+':'')+yoy.toFixed(2)+'pp':(yoy>=0?'+':'')+(yoy*100).toFixed(1)+'%'):'—';
       html += `<tr class="sub"><td>${lbl}</td><td>${fmt(vc)}</td><td>${pm!==null?fmt(vp):'—'}</td><td>${pyy!==null?fmt(vy):'—'}</td><td class="${mc2}">${mt}</td><td class="${yc2}">${yt}</td></tr>`;
     });
   });
@@ -658,8 +658,8 @@ function buildCampaignTable(){
       const yoy=vy!==0?(isBp?(vc-vy)*10000:(vc-vy)/vy):null;
       const mc2=mom!==null?(lower?(mom<0?'good':'bad'):(mom>0?'good':'bad')):'';
       const yc2=yoy!==null?(lower?(yoy<0?'good':'bad'):(yoy>0?'good':'bad')):'';
-      const mt=mom!==null?(isBp?(mom>=0?'+':'')+mom.toFixed(1)+'bp':(mom>=0?'+':'')+(mom*100).toFixed(1)+'%'):'—';
-      const yt=yoy!==null?(isBp?(yoy>=0?'+':'')+yoy.toFixed(1)+'bp':(yoy>=0?'+':'')+(yoy*100).toFixed(1)+'%'):'—';
+      const mt=mom!==null?(isBp?(mom>=0?'+':'')+mom.toFixed(2)+'pp':(mom>=0?'+':'')+(mom*100).toFixed(1)+'%'):'—';
+      const yt=yoy!==null?(isBp?(yoy>=0?'+':'')+yoy.toFixed(2)+'pp':(yoy>=0?'+':'')+(yoy*100).toFixed(1)+'%'):'—';
       html+=`<tr class="sub"><td>${lbl}</td><td>${fmt(vc)}</td><td>${fmt(vp)}</td><td>${fmt(vy)}</td><td class="${mc2}">${mt}</td><td class="${yc2}">${yt}</td></tr>`;
     });
   });
@@ -712,8 +712,8 @@ function buildCohortTable(){
       const yoy=(!isNew&&vy!==0)?(isBp?(vc-vy)*10000:(vc-vy)/vy):null;
       const mc2=mom!==null?(lower?(mom<0?'good':'bad'):(mom>0?'good':'bad')):'';
       const yc2=yoy!==null?(lower?(yoy<0?'good':'bad'):(yoy>0?'good':'bad')):'';
-      const mt=mom!==null?(isBp?(mom>=0?'+':'')+mom.toFixed(1)+'bp':(mom>=0?'+':'')+(mom*100).toFixed(1)+'%'):'—';
-      const yt=yoy!==null?(isBp?(yoy>=0?'+':'')+yoy.toFixed(1)+'bp':(yoy>=0?'+':'')+(yoy*100).toFixed(1)+'%'):'—';
+      const mt=mom!==null?(isBp?(mom>=0?'+':'')+mom.toFixed(2)+'pp':(mom>=0?'+':'')+(mom*100).toFixed(1)+'%'):'—';
+      const yt=yoy!==null?(isBp?(yoy>=0?'+':'')+yoy.toFixed(2)+'pp':(yoy>=0?'+':'')+(yoy*100).toFixed(1)+'%'):'—';
       html+=`<tr class="sub"><td>${lbl}</td><td>${fmt(vc)}</td><td>${fmt(vp)}</td><td>${isNew?'N/A (new)':fmt(vy)}</td><td class="${mc2}">${mt}</td><td class="${yc2}">${yt}</td></tr>`;
     });
   });
