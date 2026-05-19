@@ -602,8 +602,8 @@ function buildSummaryTable(m){
 
     metrics.forEach(([lbl,fmt,getVal,isBp,lowerBetter])=>{
       const vc=getVal(mc_), vp=getVal(mp_), vy=getVal(my_);
-      const mom=(pm!==null&&vp!==0)?(isBp?(vc-vp)*10000:(vc-vp)/vp):null;
-      const yoy=(pyy!==null&&vy!==0)?(isBp?(vc-vy)*10000:(vc-vy)/vy):null;
+      const mom=(pm!==null&&vp!==0)?(isBp?(vc-vp)*100:(vc-vp)/vp):null;
+      const yoy=(pyy!==null&&vy!==0)?(isBp?(vc-vy)*100:(vc-vy)/vy):null;
       const mc2=mom!==null?(lowerBetter?(mom<0?'good':'bad'):(mom>0?'good':'bad')):'';
       const yc2=yoy!==null?(lowerBetter?(yoy<0?'good':'bad'):(yoy>0?'good':'bad')):'';
       const mt=mom!==null?(isBp?(mom>=0?'+':'')+mom.toFixed(2)+'pp':(mom>=0?'+':'')+(mom*100).toFixed(1)+'%'):'—';
@@ -654,8 +654,8 @@ function buildCampaignTable(){
     ];
     metrics.forEach(([lbl,fmt,getVal,isBp,lower])=>{
       const vc=getVal(mc),vp=getVal(mp_),vy=getVal(my_);
-      const mom=vp!==0?(isBp?(vc-vp)*10000:(vc-vp)/vp):null;
-      const yoy=vy!==0?(isBp?(vc-vy)*10000:(vc-vy)/vy):null;
+      const mom=vp!==0?(isBp?(vc-vp)*100:(vc-vp)/vp):null;
+      const yoy=vy!==0?(isBp?(vc-vy)*100:(vc-vy)/vy):null;
       const mc2=mom!==null?(lower?(mom<0?'good':'bad'):(mom>0?'good':'bad')):'';
       const yc2=yoy!==null?(lower?(yoy<0?'good':'bad'):(yoy>0?'good':'bad')):'';
       const mt=mom!==null?(isBp?(mom>=0?'+':'')+mom.toFixed(2)+'pp':(mom>=0?'+':'')+(mom*100).toFixed(1)+'%'):'—';
@@ -708,8 +708,8 @@ function buildCohortTable(){
     metrics.forEach(([lbl,fmt,getVal,isBp,lower])=>{
       const vc=getVal(mc_),vp=getVal(mp2),vy=getVal(my2);
       const isNew = k==='2026' && vy===0; // cohort didn't exist in prior year
-      const mom=vp!==0?(isBp?(vc-vp)*10000:(vc-vp)/vp):null;
-      const yoy=(!isNew&&vy!==0)?(isBp?(vc-vy)*10000:(vc-vy)/vy):null;
+      const mom=vp!==0?(isBp?(vc-vp)*100:(vc-vp)/vp):null;
+      const yoy=(!isNew&&vy!==0)?(isBp?(vc-vy)*100:(vc-vy)/vy):null;
       const mc2=mom!==null?(lower?(mom<0?'good':'bad'):(mom>0?'good':'bad')):'';
       const yc2=yoy!==null?(lower?(yoy<0?'good':'bad'):(yoy>0?'good':'bad')):'';
       const mt=mom!==null?(isBp?(mom>=0?'+':'')+mom.toFixed(2)+'pp':(mom>=0?'+':'')+(mom*100).toFixed(1)+'%'):'—';
