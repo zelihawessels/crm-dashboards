@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UT
+/* ── DIM TABLE LEGEND + OVERALL ROW ─────────────────────────────── */
+
+
+
+.dim-overall > td {
+  background: rgba(61,107,101,0.07) !important;
+  border-top: 2px solid rgba(61,107,101,0.25) !important;
+  border-bottom: 2px solid rgba(61,107,101,0.25) !important;
+}
+F-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Promo Email — Days Since Last Order | Jan 2025–Apr 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #FAF3F0;
+  --surface:  #FFFFFF;
+  --card:     #FFFFFF;
+  --card2:    #F2EAE5;
+  --border:   #E0D3CC;
+  --border2:  #D5C8C0;
+  --brand:    #3D6B65;
+  --brand-dk: #2A4D48;
+  --brand-lt: #EBF4F2;
+  --brand-md: #5B8A84;
+  --amber:    #B85C1A;
+  --amber-lt: #FEF3EB;
+  --red:      #B83232;
+  --red-lt:   #FDF0F0;
+  --green:    #3D6B65;
+  --indigo:   #4A5FA8;
+  --text:     #1C3330;
+  --muted:    #7A8E8C;
+  --muted2:   #4F6A68;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Lexend', sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+/* ── HEADER ─────────────────────────────────────────────────── */
+header {
+  background: linear-gradient(135deg, #3D6B65 0%, #2A4D48 60%, #3D6B65 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 28px 40px 24px;
+  position: relative;
+  overflow: hidden;
+}
+header::before {
+  content: '';
+  position: absolute; top: 0; right: 0; bottom: 0;
+  width: 40%;
+  background: radial-gradient(ellipse at 80% 50%, rgba(255,255,255,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
+.header-left h1 {
+  font-size: 1.6rem; font-weight: 800; letter-spacing: -0.03em;
+  color: #FFFFFF; line-height: 1.1;
+}
+.header-left h1 span { color: #A8D4CF; }
+.header-meta { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+.badge {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+  padding: 3px 10px; border-radius: 100px;
+  border: 1px solid; letter-spacing: 0.04em;
+}
+.badge-teal  { border-color: rgba(255,255,255,0.35); color: #FFFFFF; background: rgba(255,255,255,0.12); }
+.badge-amber { border-color: rgba(255,220,180,0.45); color: #FFD4A8; background: rgba(255,180,100,0.12); }
+.badge-dim   { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.06); }
+.header-note {
+  margin-top: 14px; padding: 10px 16px;
+  background: rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px; font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem; color: rgba(255,255,255,0.75); line-height: 1.6;
+}
+
+/* ── KPI ROW ─────────────────────────────────────────────────── */
+.kpi-row {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  gap: 14px; padding: 24px 40px; background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+.kpi {
+  background: var(--card); border: 1px solid var(--border2);
+  border-radius: 10px; padding: 16px 18px;
+  position: relative; overflow: hidden;
+}
+.kpi::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 3px; background: var(--kpi-c, var(--brand));
+}
+.kpi-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--muted); margin-bottom: 6px;
+}
+.kpi-value {
+  font-size: 1.65rem; font-weight: 800; color: var(--kpi-c, var(--brand));
+  letter-spacing: -0.03em; line-height: 1;
+}
+.kpi-sub { font-size: 0.7rem; color: var(--muted); margin-top: 4px; font-family: 'JetBrains Mono', monospace; }
+
+/* ── MAIN LAYOUT ─────────────────────────────────────────────── */
+.main { max-width: 1500px; margin: 0 auto; padding: 20px 40px; }
+
+/* ── SECTION ─────────────────────────────────────────────────── */
+.section { margin-bottom: 0; }
+.section-head {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 18px;
+}
+.section-head h2 { font-size: 1rem; font-weight: 700; letter-spacing: -0.01em; color: var(--brand-dk); }
+.pill {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+  padding: 2px 8px; border-radius: 4px;
+  border: 1px solid var(--border2); color: var(--muted);
+  background: rgba(0,0,0,0.03);
+}
+
+/* ── FINDINGS GRID ───────────────────────────────────────────── */
+.findings { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.finding {
+  background: var(--card); border: 1px solid var(--border2);
+  border-radius: 10px; padding: 18px 20px;
+}
+.finding.flag { border-color: rgba(184,50,50,0.2); background: var(--red-lt); }
+.finding.star { border-color: rgba(184,92,26,0.2); background: var(--amber-lt); }
+.finding.good { border-color: rgba(61,107,101,0.2); background: var(--brand-lt); }
+.finding-label {
+  font-size: 0.67rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.08em; margin-bottom: 8px;
+}
+.finding-label.r { color: var(--red); }
+.finding-label.a { color: var(--amber); }
+.finding-label.t { color: var(--brand); }
+.finding-label.g { color: var(--brand); }
+.finding-label.i { color: var(--indigo); }
+.finding-body {
+  font-size: 0.78rem; color: var(--muted2); line-height: 1.65;
+  font-family: 'JetBrains Mono', monospace;
+}
+.finding-body strong { color: var(--text); font-weight: 600; }
+
+/* ── CHART AREA ──────────────────────────────────────────────── */
+.chart-wrap {
+  background: var(--card); border: 1px solid var(--border2);
+  border-radius: 12px; padding: 22px;
+}
+.tab-bar {
+  display: flex; gap: 4px;
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 4px; width: fit-content;
+  margin-bottom: 20px; flex-wrap: wrap;
+}
+.tab {
+  background: none; border: none; cursor: pointer;
+  font-family: 'Lexend', sans-serif; font-size: 0.76rem; font-weight: 600;
+  color: var(--muted); padding: 6px 14px; border-radius: 6px;
+  transition: all 0.15s;
+}
+.tab.on { background: var(--brand); color: #fff; }
+.tab:hover:not(.on) { color: var(--brand-dk); background: var(--brand-lt); }
+.chart-canvas-box { position: relative; height: 360px; }
+.legend {
+  display: flex; flex-wrap: wrap; gap: 6px 16px;
+  margin-top: 16px; padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+.leg-item {
+  display: flex; align-items: center; gap: 6px;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+  color: var(--muted); cursor: pointer;
+}
+.leg-item:hover { color: var(--text); }
+.leg-dot { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
+
+/* ── TABLE ───────────────────────────────────────────────────── */
+.ctrl-row { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
+.ctrl-label { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--muted); }
+.ctrl-sel {
+  background: var(--card); border: 1px solid var(--border2);
+  border-radius: 7px; color: var(--text);
+  font-family: 'JetBrains Mono', monospace; font-size: 0.73rem;
+  padding: 7px 12px; cursor: pointer; outline: none;
+  transition: border-color 0.15s;
+}
+.ctrl-sel:focus { border-color: var(--brand); }
+.tbl-outer { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border2); }
+table { width: 100%; border-collapse: collapse; font-size: 0.72rem; }
+thead th {
+  background: var(--card2); padding: 10px 10px; text-align: center;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.63rem; font-weight: 500;
+  color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--border2); white-space: nowrap;
+  position: sticky; top: 0; z-index: 2;
+}
+thead th:first-child { text-align: left; min-width: 100px; }
+tbody td {
+  padding: 8px 10px; text-align: center;
+  border-bottom: 1px solid #EDE4DE;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text); font-size: 0.71rem;
+}
+tbody td:first-child { text-align: left; color: var(--muted2); font-weight: 500; padding-left: 14px; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: rgba(61,107,101,0.04); }
+tbody tr.suppressed { opacity: 0.45; }
+tbody tr.suppressed td:first-child { opacity: 1; }
+.supp-tag {
+  display: inline-block; font-size: 0.58rem;
+  background: rgba(184,92,26,0.08); color: var(--amber);
+  border: 1px solid rgba(184,92,26,0.2); border-radius: 3px;
+  padding: 0 4px; margin-left: 5px; vertical-align: middle;
+}
+.avg-cell { color: var(--muted); font-style: italic; font-weight: 600 !important; }
+
+/* ── FOOTER ──────────────────────────────────────────────────── */
+.footer-note {
+  margin-top: 32px; padding: 14px 18px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem; color: var(--muted); line-height: 1.7;
+}
+.footer-note strong { color: var(--muted2); }
+
+/* ── APR 2026 HIGHLIGHT ──────────────────────────────────────── */
+
+/* ── AUDIENCE / AUTOSHIP TAB ─────────────────────────────────────── */
+.dim-intro {
+  font-size: 0.82rem; color: var(--muted2); line-height: 1.75;
+  font-family: 'JetBrains Mono', monospace;
+  margin-bottom: 24px;
+}
+.dim-intro strong { color: var(--text); }
+.dim-tables { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px; }
+@media (max-width: 1100px) { .dim-tables { grid-template-columns: 1fr; } }
+.dim-table-wrap { background: var(--card); border: 1px solid var(--border2); border-radius: 10px; overflow: hidden; }
+.dim-table-title {
+  background: var(--brand-dk); color: #fff;
+  font-size: 0.78rem; font-weight: 700; padding: 12px 16px;
+  letter-spacing: -0.01em;
+}
+.dim-table-subtitle {
+  font-size: 0.68rem; color: rgba(255,255,255,0.7);
+  font-family: 'JetBrains Mono', monospace; margin-top: 2px;
+}
+.dim-tbl { width: 100%; border-collapse: collapse; font-size: 0.71rem; }
+.dim-tbl th {
+  background: var(--card2); padding: 8px 10px; text-align: center;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.63rem; font-weight: 600;
+  color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--border2);
+}
+.dim-tbl th:first-child { text-align: left; min-width: 90px; }
+.dim-tbl td {
+  padding: 8px 10px; text-align: center;
+  border-bottom: 1px solid #EDE4DE;
+  font-family: 'JetBrains Mono', monospace; color: var(--text);
+}
+.dim-tbl td:first-child { text-align: left; color: var(--muted2); font-weight: 600; padding-left: 14px; }
+.dim-tbl tr:last-child td { border-bottom: none; }
+.dim-tbl tr:hover td { background: var(--brand-lt); }
+.dim-tbl tr.dim-best td { background: rgba(61,107,101,0.06); }
+.dim-tbl tr.dim-warn td { background: rgba(184,50,50,0.04); }
+.cell-hi { color: var(--brand-dk) !important; font-weight: 700 !important; }
+.cell-lo { color: var(--red) !important; }
+
+.dim-findings { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 28px; }
+.dim-finding {
+  background: var(--card); border: 1px solid var(--border2);
+  border-radius: 10px; padding: 18px 20px;
+}
+.dim-finding-label {
+  font-size: 0.67rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.08em; margin-bottom: 8px; color: var(--brand);
+}
+.dim-finding.warn .dim-finding-label { color: var(--amber); }
+.dim-finding.flag .dim-finding-label { color: var(--red); }
+.dim-finding-body {
+  font-size: 0.76rem; color: var(--text); line-height: 1.65;
+  font-family: 'JetBrains Mono', monospace;
+}
+.dim-finding-body strong { color: var(--brand-dk); }
+.holdout-note {
+  background: var(--brand-lt); border: 1px solid rgba(61,107,101,0.2);
+  border-radius: 8px; padding: 16px 20px;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+  color: var(--brand-dk); line-height: 1.75;
+}
+.holdout-note strong { font-weight: 700; }
+.holdout-note ul { margin: 8px 0 0 18px; }
+.holdout-note li { margin-bottom: 4px; }
+
+.apr-highlight {
+  border-left: 2px solid var(--amber) !important; background: rgba(184,92,26,0.04) !important;
+}
+
+
+
+
+/* ── SECTION DIVIDER ────────────────────────────────────────────── */
+.section-divider {
+  height: 8px; background: var(--bg);
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+}
+
+.jump-link:hover { color: var(--brand-dk); background: var(--brand-lt); border-bottom-color: var(--brand); }
+
+
+.main-tab-wrap {
+  background: var(--surface);
+  border-bottom: 2px solid var(--border);
+  padding: 0 40px;
+}
+.main-tab-bar {
+  display: flex; gap: 0; max-width: 1500px; margin: 0 auto;
+}
+.main-tab {
+  background: none; border: none; cursor: pointer;
+  font-family: 'Lexend', sans-serif; font-size: 0.85rem; font-weight: 600;
+  color: var(--muted); padding: 16px 24px;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.15s; letter-spacing: -0.01em;
+  display: block;
+}
+.main-tab:hover { color: var(--brand-md); background: var(--brand-lt); }
+
+body:has(#ctrl-findings:checked)  label[for="ctrl-findings"]  { color: var(--brand-dk); border-bottom-color: var(--brand); }
+body:has(#ctrl-testplan:checked)  label[for="ctrl-testplan"]  { color: var(--brand-dk); border-bottom-color: var(--brand); }
+body:has(#ctrl-audience:checked)  label[for="ctrl-audience"]  { color: var(--brand-dk); border-bottom-color: var(--brand); }
+.tab-panel.active { display: block; }
+
+
+
+/* ── EXEC SUMMARY NEXT STEPS ─────────────────────────────────── */
+.exec-next-steps {
+  background: var(--brand-lt); border: 1px solid rgba(61,107,101,0.2);
+  border-radius: 10px; padding: 20px 24px; margin-top: 4px; margin-bottom: 20px;
+}
+.exec-next-title {
+  font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--brand-dk); margin-bottom: 14px;
+}
+.exec-next-item {
+  display: flex; gap: 14px; padding: 8px 0;
+  border-bottom: 1px solid rgba(61,107,101,0.12);
+}
+.exec-next-item:last-child { border-bottom: none; padding-bottom: 0; }
+.exec-next-num {
+  flex: 0 0 22px; height: 22px;
+  background: var(--brand-dk); color: #fff;
+  border-radius: 50%; font-size: 0.68rem; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace; margin-top: 1px;
+}
+.exec-next-text {
+  font-size: 0.77rem; color: var(--text); line-height: 1.65;
+  font-family: 'JetBrains Mono', monospace; flex: 1;
+}
+
+/* ── EXEC SUMMARY BULLETS ───────────────────────────────────────── */
+.exec-bullets { margin-bottom: 24px; }
+.exec-bullet {
+  display: flex; gap: 16px; padding: 12px 0;
+  border-bottom: 1px solid var(--border2);
+}
+.exec-bullet:last-child { border-bottom: none; }
+.exec-label {
+  flex: 0 0 180px; font-size: 0.72rem; font-weight: 700;
+  color: var(--brand-dk); text-transform: uppercase;
+  letter-spacing: 0.05em; line-height: 1.6;
+  padding-top: 1px;
+}
+.exec-text {
+  font-size: 0.79rem; color: var(--text); line-height: 1.65;
+  font-family: 'JetBrains Mono', monospace; flex: 1;
+}
+
+/* ── SUMMARY TABLE ───────────────────────────────────────────── */
+.summary-wrap {
+  background: var(--card); border: 1px solid var(--border2);
+  border-radius: 12px; padding: 28px; margin-bottom: 14px;
+}
+.summary-intro {
+  font-size: 0.84rem; color: var(--muted2); line-height: 1.75;
+  margin-bottom: 22px;
+}
+.section-intro {
+  font-size: 0.79rem; color: var(--muted2); line-height: 1.75;
+  font-family: 'JetBrains Mono', monospace; margin-bottom: 14px;
+}
+.summary-intro strong { color: var(--text); font-weight: 600; }
+.context-strip {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  padding: 12px 16px; margin-bottom: 22px;
+  background: var(--brand-lt); border: 1px solid rgba(61,107,101,0.2);
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+  color: var(--brand-dk); line-height: 1.6;
+}
+.context-strip span::after { content: ' |'; margin-left: 8px; color: var(--border2); }
+.context-strip span:last-child::after { content: ''; }
+
+.snap-table { width: 100%; border-collapse: collapse; }
+.snap-table th {
+  background: var(--brand); color: #fff;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+  font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;
+  padding: 10px 12px; text-align: center;
+}
+.snap-table th:first-child { text-align: left; border-radius: 6px 0 0 0; }
+.snap-table th:last-child  { border-radius: 0 6px 0 0; }
+.snap-table td {
+  padding: 9px 12px; text-align: center;
+  border-bottom: 1px solid #EDE4DE;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.73rem;
+  color: var(--text);
+}
+.snap-table td:first-child { text-align: left; font-weight: 600; color: var(--brand-dk); }
+.snap-table tr:last-child td { border-bottom: none; }
+.snap-table tr:hover td { background: var(--brand-lt); }
+.snap-table tr.snap-best td { background: rgba(61,107,101,0.06); }
+.snap-table tr.snap-warn td { background: rgba(184,50,50,0.04); }
+.vol-note {
+  margin-top: 8px; font-family: 'JetBrains Mono', monospace;
+  font-size: 0.67rem; color: var(--muted);
+}
+
+/* ── TEST PLAN ───────────────────────────────────────────────── */
+.test-plan { display: flex; flex-direction: column; gap: 12px; }
+.test-item {
+  display: grid; grid-template-columns: 52px 1fr auto;
+  gap: 0; background: var(--card);
+  border: 1px solid var(--border2); border-radius: 10px; overflow: hidden;
+}
+.test-num {
+  background: var(--brand); color: #fff;
+  font-size: 1.1rem; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+}
+.test-body { padding: 16px 18px; }
+.test-title {
+  font-size: 0.85rem; font-weight: 700; color: var(--brand-dk);
+  margin-bottom: 8px; line-height: 1.4;
+}
+.test-hypo {
+  font-size: 0.75rem; color: var(--text); line-height: 1.7;
+  font-family: 'JetBrains Mono', monospace;
+}
+.test-hypo strong { color: var(--text); }
+.test-pri {
+  padding: 16px 16px; display: flex; align-items: flex-start;
+  padding-top: 18px;
+}
+.pri-badge {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+  font-weight: 700; padding: 3px 10px; border-radius: 100px;
+  white-space: nowrap; letter-spacing: 0.04em;
+}
+.pri-high   { background: rgba(184,50,50,0.1); color: var(--red); border: 1px solid rgba(184,50,50,0.2); }
+.pri-medium { background: rgba(184,92,26,0.1); color: var(--amber); border: 1px solid rgba(184,92,26,0.2); }
+.pri-low    { background: var(--brand-lt); color: var(--brand); border: 1px solid rgba(61,107,101,0.25); }
+
+/* ── NEXT STEPS ──────────────────────────────────────────────── */
+.steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.step-card {
+  background: var(--card); border: 1px solid var(--border2);
+  border-radius: 10px; padding: 18px 20px;
+  border-left: 4px solid var(--brand);
+}
+.step-card.pri2 { border-left-color: var(--brand-md); }
+.step-card.pri3 { border-left-color: var(--border2); }
+.step-num {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+  font-weight: 700; color: var(--brand); text-transform: uppercase;
+  letter-spacing: 0.08em; margin-bottom: 6px;
+}
+.step-title { font-size: 0.84rem; font-weight: 700; color: var(--brand-dk); margin-bottom: 8px; }
+.step-body {
+  font-size: 0.75rem; color: var(--muted2); line-height: 1.65;
+  font-family: 'JetBrains Mono', monospace;
+}
+.step-body strong { color: var(--text); }
+.divider {
+  border: none; border-top: 1px solid var(--border);
+  margin: 36px 0;
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════ HEADER -->
+<header>
+  <div class="header-top">
+    <div class="header-left">
+      <h1>Executive Summary</h1>
+      <div class="header-meta">
+        <span class="badge badge-dim">Jan 2025 – Apr 2026 &nbsp;·&nbsp; 16 months</span>
+      </div>
+    </div>
+  </div>
+
+</header>
+
+<!-- ═══════════════════════════════════════════════════════ KPIS -->
+<div class="kpi-row">
+  <div class="kpi" style="--kpi-c: var(--brand)">
+    <div class="kpi-label">Largest Segment</div>
+    <div class="kpi-value">121+</div>
+    <div class="kpi-sub">~30% of promo sends avg · growing</div>
+  </div>
+  <div class="kpi" style="--kpi-c: var(--amber)">
+    <div class="kpi-label">Best Rev / Delivered</div>
+    <div class="kpi-value" id="kpi-rpd">$0.67</div>
+    <div class="kpi-sub">8-14 day segment avg</div>
+  </div>
+  <div class="kpi" style="--kpi-c: var(--brand)">
+    <div class="kpi-label">Best CTR</div>
+    <div class="kpi-value" id="kpi-ctr">1.72%</div>
+    <div class="kpi-sub">8-14 day segment avg</div>
+  </div>
+  <div class="kpi" style="--kpi-c: var(--red)">
+    <div class="kpi-label">Lapsed Segment Optouts</div>
+    <div class="kpi-value">~36,200</div>
+    <div class="kpi-sub">per year · 121+ and No Orders · 58% of program total</div>
+  </div>
+  <div class="kpi" style="--kpi-c: var(--indigo)">
+    <div class="kpi-label">Apr 2026 8-14 RPD</div>
+    <div class="kpi-value">$0.70</div>
+    <div class="kpi-sub">strongest month on record</div>
+  </div>
+</div>
+
+
+
+  <div class="main">
+    <!-- ═══ OVERVIEW / SUMMARY ═════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-head"><h2 id="sec-overview">Executive Summary</h2><span class="pill">Jan 2025 – Apr 2026 · Promo email · 16 months</span></div>
+    <div class="summary-wrap">
+      <p class="summary-intro">
+        Thrive Market's promo email program sends daily blasts to active members. This analysis examines 16 months of performance (Jan 2025–Apr 2026) across 14 days-since-last-order segments to assess whether send volume, cadence, and suppression thresholds are calibrated to both revenue return and list health.
+      </p>
+      <div class="exec-bullets">
+        <div class="exec-bullet">
+          <span class="exec-label">Volume and list health</span>
+          <span class="exec-text">The 121+ days and No Orders segments account for ~49% of promo sends and return $0.004 and $0.002 RPD respectively — the lowest of any segment. This reflects list composition, not send frequency. The same two segments generate ~3,000 optouts/month (~36,200/year), representing 58% of all program optouts: No Orders at 0.021% (~1,400/month), 121+ at 0.015% (~1,600/month).</span>
+        </div>
+        <div class="exec-bullet">
+          <span class="exec-label">Best-performing window</span>
+          <span class="exec-text">The 8–14 day post-purchase window averages $0.67 Rev/Delivered — roughly 20× the 121+ segment. April 2026 reached $0.70, the highest monthly figure on record. Within this window, Power Members (8+ orders) return $0.82 RPD vs $0.33 for Onboarding members, and non-autoship members return 4.5× more attributed RPD than autoship-active members. The overall program average of $0.67 masks this spread.</span>
+        </div>
+
+        <div class="exec-bullet">
+          <span class="exec-label">Audience tier performance</span>
+          <span class="exec-text">Across the full program, Power Members (8+ orders) return $0.154 RPD per send — 13× more than Onboarding members ($0.012) and 4× more than Habit Formation ($0.041). Power Members and Onboarding each average ~13–14M sends per month, so the volume exposure is roughly equivalent while the return gap is large. Onboarding's optout rate of 0.021% matches the No Orders segment — the highest in the program. </span>
+        </div>
+        <div class="exec-bullet">
+          <span class="exec-label">Autoship status and email response</span>
+          <span class="exec-text">Within the 8–14 day window, NOT Active members are the most responsive to promos ($1.51 RPD) and Active (w/ items) the least ($0.34). But overall program RPD tells a different story: Active (no items) leads ($0.086), Active (w/ items) middle ($0.076), NOT Active lowest ($0.067). The reason: NOT Active members purchase more sporadically, so at any given time most of them are lapsed — their sends are concentrated in 121+ and No Orders where per-send returns approach zero. Active (no items) members purchase more consistently, so more of their sends fall in productive recency windows, producing a higher overall RPD despite lower per-window responsiveness. NOT Active members return $1.51 RPD at 8-14 days — the highest of any autoship group in the active window — but only $0.004 and $0.001 RPD once they lapse into 121+ and No Orders. At 7.8M/month in 121+ and 5.3M/month in No Orders at near-zero return, their lapsed sends account for a disproportionate share of program volume, making suppression of this group the highest-ROI action.</span>
+        </div>
+      </div>
+      <div class="exec-next-steps">
+        <div class="exec-next-title">Priority actions</div>
+        <div class="exec-next-item">
+          <span class="exec-next-num">1</span>
+          <span class="exec-next-text"><strong>Run a holdout</strong> on 121+ and No Orders (primary cells), plus 15–30 days as a reference baseline — stratified by autoship status. This establishes which attributed revenue is incremental before any suppression decisions are made. Full detail in Recommended Next Steps.</span>
+        </div>
+        <div class="exec-next-item">
+          <span class="exec-next-num">2</span>
+          <span class="exec-next-text"><strong>Route No Orders members (no click in 180+ days) to a re-engagement flow</strong> and remove from daily sends. Projected: ~1,400 fewer optouts/month.</span>
+        </div>
+        <div class="exec-next-item">
+          <span class="exec-next-num">3</span>
+          <span class="exec-next-text"><strong>Reduce 121+ cadence from daily to 3×/week</strong> for non-autoship, non-Power Members. Projected: ~800–1,000 fewer optouts/month. Size revenue impact against holdout data first.</span>
+        </div>
+      </div>
+      <div class="context-strip">
+        <span>Promo blast campaigns only — lifecycle and transactional excluded</span>
+        <span>3-day post-purchase suppression active (consistently enforced from Jan 2026)</span>
+        <span>Engagement suppression: 30-day inactivity + no order in 90 days → 1×/week cadence</span>
+      </div>
+      <table class="snap-table" id="snapTable">
+        <thead>
+          <tr>
+            <th>Segment</th>
+            <th>Avg Del/mo</th>
+            <th>Del %</th>
+            <th>CTR</th>
+            <th>Purchase CVR</th>
+            <th>Rev / Delivered</th>
+            <th>AOV</th>
+            <th>Optout %</th>
+          </tr>
+        </thead>
+        <tbody id="snapBody"></tbody>
+      </table>
+      <p class="vol-note">* Days 1–3 excluded — inconsistent suppression in 2025, near-zero volume in 2026. &nbsp;|&nbsp; 8-14 day Purchase CVR elevated by post-purchase attribution overlap.</p>
+    </div>
+  </div>
+  </div>
+</div>
+
+  <div class="main">
+    <!-- Findings -->
+  <div class="section">
+    <div class="section-head"><h2 id="sec-findings">Key Findings</h2><span class="pill">Jan 2025 – Apr 2026</span></div>
+    <p class="section-intro">The findings below cover the program's return per send and list health by segment, and identify where current cadence and suppression thresholds are misaligned.</p>
+    <div class="findings">
+      <div class="finding star">
+        <div class="finding-label a">8–14 Days: Highest Return Segment</div>
+        <div class="finding-body"><strong>~9.6% of promo sends.</strong> CTR 1.72%, Purchase CVR 0.754%, RPD $0.67 — the highest of any segment by a wide margin. By audience tier: Power Members (8+ orders) account for ~67% of 8-14 sends and return $0.82 RPD vs $0.33 for Onboarding — a 2.5× gap within the same window. By autoship status: NOT Active members return $1.51 RPD vs $0.34 for Active (w/ items), indicating members without recurring orders are more likely to make incremental purchases when prompted.</div>
+      </div>
+      <div class="finding flag">
+        <div class="finding-label r">121+ Days: Volume Without Returns</div>
+        <div class="finding-body">At <strong>~30% of promo sends and growing</strong>, the 121+ segment returns $0.004 RPD — less than 1% of the 8–14 day rate — with a 0.37% CTR. It generates <strong>~1,600 optouts/month (~19,100/year)</strong>. By autoship status: NOT Active members account for ~70% of 121+ sends and represent the clearest suppression case. Power Members in 121+ still return $0.008 RPD — double the segment average — which warrants separate holdout treatment before suppression is applied to this bucket.</div>
+      </div>
+      <div class="finding flag">
+        <div class="finding-label r">No Orders: Lowest Return, Highest Optout</div>
+        <div class="finding-body"><strong>~19% of promo sends.</strong> RPD $0.002 and Purchase CVR 0.002% — the lowest in the program. Optout rate <strong>0.021%</strong>, nearly 2× the program average, generating <strong>~1,400 optouts/month (~17,000/year)</strong>. There is no high-value sub-group within No Orders to protect — suppression applies uniformly here.</div>
+      </div>
+      <div class="finding good">
+        <div class="finding-label g">Productive Window: 4–30 Days</div>
+        <div class="finding-body">CTR 0.84–1.72%, CVR 0.03–0.75%, RPD $0.023–$0.67, optout rates at program lows of 0.009–0.013%. Current suppression logic is functioning as intended. Power Members and NOT Active members drive the majority of attributed revenue across this range. Active (no items) members outperform Active (w/ items) at every recency level within the window, and Active (w/ items) shows the lowest responsiveness even here — consistent with their pattern across the full program.</div>
+      </div>
+      <div class="finding good">
+        <div class="finding-label t">AOV Peaks at 15–30 Days</div>
+        <div class="finding-body">The 15–30 day segment has the highest AOV at ~<strong>$102</strong>; the 4–14 day window averages ~$89–90; No Orders lowest at ~$84. By audience tier, Power Members drive the premium at $104.5 in this window vs $97.7 for Habit Formation. By autoship status, Active (no items) leads at $104.8, closely followed by Active (w/ items) at $103.7. Suppressing lapsed segments reduces optouts and lifts program average order quality.</div>
+      </div>
+      <div class="finding">
+        <div class="finding-label i">April 2026: Current Trends Stable</div>
+        <div class="finding-body">April 2026 shows consistent patterns with no material deterioration. 8-14 day segment at <strong>CTR 1.80%, PCVR 0.77%, RPD $0.70</strong> — all above 16-month averages. 121+ and No Orders remain elevated in volume share (~49% combined), reinforcing the suppression opportunity.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stacked Chart -->
+  <div class="section" style="margin-top:20px">
+    <div class="section-head">
+      <h2>Volume Weight by Segment</h2>
+      <span class="pill">% of Monthly Total</span>
+    </div>
+    <div class="tab-bar" id="chartTabs">
+      <button class="tab on" data-m="D">📬 Delivered</button>
+      <button class="tab" data-m="Cl">👆 Clicks</button>
+      <button class="tab" data-m="Pu">🛒 Purchases</button>
+      <button class="tab" data-m="Re">💰 Revenue</button>
+      <button class="tab" data-m="Op">🚪 Optouts</button>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-canvas-box"><canvas id="stackChart"></canvas></div>
+      <div class="legend" id="legend"></div>
+    </div>
+  </div>
+
+  <!-- Rate Table -->
+  <div class="section" style="margin-top:20px">
+    <div class="section-head">
+      <h2>Rate Metrics by Segment &amp; Month</h2>
+      <span class="pill">All metrics computed from raw data</span>
+    </div>
+    <div class="ctrl-row">
+      <span class="ctrl-label">Metric:</span>
+      <select class="ctrl-sel" id="metricSel">
+        <option value="ctr">CTR — Clicks ÷ Delivered</option>
+        <option value="pcvr">Purchase CVR — Purchases ÷ Delivered</option>
+        <option value="optout">Optout % — Optouts ÷ Delivered</option>
+        <option value="rpd">Rev / Delivered ($)</option>
+        <option value="aov">AOV — Revenue ÷ Purchases ($)</option>
+      </select>
+      <span class="ctrl-label" style="margin-left:8px">Heatmap:</span>
+      <select class="ctrl-sel" id="heatSel">
+        <option value="row">By Row</option>
+        <option value="col">By Column</option>
+        <option value="none">Off</option>
+      </select>
+    </div>
+    <div class="tbl-outer">
+      <table>
+        <thead id="tblHead"></thead>
+        <tbody id="tblBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    <strong>Source:</strong> Domo promo campaign export, monthly aggregation by days-since-last-order segment.
+    Jan 2025–Mar 2026 from verified promo xlsx; Apr 2026 from Google Sheets export.
+    &nbsp;|&nbsp; <strong>Days 1–3:</strong> suppression gap in 2025, near-zero volume in 2026 — treat as unreliable.
+    &nbsp;|&nbsp; <strong>8-14 day Purchase CVR</strong> (0.75% avg) is elevated by post-purchase attribution overlap — purchases made organically within the attribution window are counted against the email send.
+    &nbsp;|&nbsp; All calculated metrics are computed live from raw data embedded in this file.
+  </div>
+</div>
+
+  <div class="main">
+    <div class="section">
+      <div class="section-head"><h2 id="sec-audience">Audience &amp; Autoship Cuts</h2><span class="pill">Segmented by audience tier and autoship status</span></div>
+
+      <p class="dim-intro">
+        The segment data above shows a volume-return mismatch at the program level. The two dimensions below explain who is driving that imbalance. Audience tier and autoship status produce substantially different return profiles within the same recency bucket. Cards are grouped by dimension — audience tier first, then autoship status — to show where the performance differences originate and which sub-groups warrant separate treatment in any suppression design.
+      </p>
+
+      <div class="dim-findings">
+
+        <div class="dim-finding">
+          <div class="dim-finding-label">Power Members drive 8-14 day performance</div>
+          <div class="dim-finding-body">Power Members (8+ orders) return <strong>$0.82 RPD</strong> in the 8–14 day window — 23% above the $0.67 program average — and account for ~66% of 8–14 day volume. Their 121+ segment returns $0.008 RPD, double the program average for that bucket. Suppression logic for Power Members should be evaluated independently.</div>
+        </div>
+<div class="dim-finding">
+          <div class="dim-finding-label">Habit Formation: stable mid-tier</div>
+          <div class="dim-finding-body">Habit Formation members (3–7 orders) return <strong>$0.41 RPD at 8–14 days</strong> and <strong>$0.041 overall</strong> across all segments — above Onboarding ($0.012) but below Power Members ($0.154). 42% of HF sends fall in the 121+ bucket — the highest lapse concentration of any audience tier. These are members who completed 3–7 purchases at some point but have since disengaged; establishing an early purchase history does not guarantee sustained engagement. Their 121+ RPD of $0.003 is near the segment floor, meaning lapsed HF members return similarly to lapsed Onboarding members.</div>
+        </div>
+<div class="dim-finding">
+          <div class="dim-finding-label">Onboarding tier: largest send volume, lowest return</div>
+          <div class="dim-finding-body">Onboarding members (0–2 orders) return <strong>$0.33 RPD</strong> in the 8–14 day window vs $0.67 overall. Most Onboarding volume is in No Orders (6.9M/month avg). No Orders optout is 0.021%, the highest of any cohort.</div>
+        </div>
+<div class="dim-finding warn">
+          <div class="dim-finding-label warn">Autoship Active (w/ items): lowest promo engagement</div>
+          <div class="dim-finding-body">In the 8-14 day window: Active (w/ items) $0.34 RPD — lowest of the three groups; Active (no items) $0.68; NOT Active $1.51. Overall program RPD tells a different story: <strong>Active (no items) $0.086 → Active (w/ items) $0.076 → NOT Active $0.067</strong>. Active (w/ items) members outperform NOT Active overall because their sends are concentrated in productive windows: only ~14% of their sends land in 121+ (1.19M/month) or No Orders (0.07M/month). NOT Active members are far more lapsed: ~74% of their sends land in 121+ (7.79M/month) or No Orders (5.26M/month) where per-send returns approach zero. Despite being more responsive per send when recently active, their heavy lapsed volume drags overall RPD below Active (w/ items). Autoship cron orders do not appear in email attribution data, so these differences reflect genuine engagement patterns. <strong>A holdout will confirm how much incremental lift promo sends deliver on top of existing autoship cadence.</strong> Cadence and reactivation recommendations for each group are covered in items 4 and 5 of Recommended Next Steps.</div>
+        </div>
+<div class="dim-finding flag">
+          <div class="dim-finding-label flag">NOT Active: largest suppression opportunity</div>
+          <div class="dim-finding-body">Autoship NOT Active members account for <strong>7.8M avg monthly 121+ sends</strong> and <strong>5.3M No Orders sends</strong>. RPD is $0.004 and $0.001 respectively, with optout rates of 0.015–0.018%. These are non-autoship members with no subscription activity, making them the clearest suppression candidates.</div>
+        </div>
+
+      </div>
+
+      <div class="dim-tables">
+
+        <div class="dim-table-wrap">
+          <div class="dim-table-title">Metrics by Audience Tier
+            <div class="dim-table-subtitle">16-month aggregate · Days 4–7 through No Orders · Days 1–3 excluded</div>
+          </div>
+          <div class="dim-table-controls">
+            <label class="dim-ctrl-label">Metric:</label>
+            <select id="dim-sel-aud" class="dim-metric-sel">
+              <option value="rpd">Rev / Delivered</option>
+              <option value="pcvr">Purchase CVR</option>
+              <option value="aov">AOV</option>
+              <option value="opt">Optout %</option>
+              <option value="del">Avg Del / Mo (M)</option>
+              <option value="pct">% of Segment Sends</option>
+            </select>
+          </div>
+          <div id="dim-tbl-aud"><table class="dim-tbl"><thead></thead><tbody></tbody></table></div>
+          </div>
+
+        <div class="dim-table-wrap">
+          <div class="dim-table-title">Metrics by Autoship Status
+            <div class="dim-table-subtitle">16-month aggregate · Days 4–7 through No Orders · Days 1–3 excluded</div>
+          </div>
+          <div class="dim-table-controls">
+            <label class="dim-ctrl-label">Metric:</label>
+            <select id="dim-sel-as" class="dim-metric-sel">
+              <option value="rpd">Rev / Delivered</option>
+              <option value="pcvr">Purchase CVR</option>
+              <option value="aov">AOV</option>
+              <option value="opt">Optout %</option>
+              <option value="del">Avg Del / Mo (M)</option>
+              <option value="pct">% of Segment Sends</option>
+            </select>
+          </div>
+          <div id="dim-tbl-as"><table class="dim-tbl"><thead></thead><tbody></tbody></table></div>
+          </div>
+
+      </div>
+
+          </div>
+  </div>
+</div>
+
+<div class="main">
+    <!-- ═══ PROPOSED TEST PLAN ══════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-head"><h2 id="sec-testplan">Recommended Next Steps</h2><span class="pill">Holdout is prerequisite — run before acting on items 2–5</span></div>
+    <p style="font-size:0.82rem;color:var(--text);font-family:'JetBrains Mono',monospace;line-height:1.7;margin-bottom:20px">
+      The following steps are prioritized based on this analysis. Item 1 (holdout) is the prerequisite for items 3, 4, 6, and 7. Items 2 and 5 can run independently — item 2 while the holdout is in flight, item 5 once the engagement approach for that group is defined. Run the holdout for a minimum of 4–6 weeks before actioning the holdout-dependent items.
+    </p>
+    <div class="test-plan">
+
+      <div class="test-item">
+        <div class="test-num">1</div>
+        <div class="test-body">
+          <div class="test-title">Run a holdout on 121+, No Orders, and 15–30 days as a reference baseline</div>
+          <div class="test-hypo">The holdout answers one question: how much of the revenue attributed to 121+ and No Orders sends is incremental vs. organic? A holdout withholds a portion of each segment from sends and compares organic purchase rates against the mailed group. Primary cells: 121+ and No Orders, stratified by autoship status — run NOT Active separately from Active (w/ items), since their suppression cases are different. Include 15–30 as a reference baseline to see where email incrementality begins to drop off, which will inform where any future suppression threshold should sit. Do not hold out 4–7 or 8–14 day members — these segments have no planned changes and withholding emails from the highest-value window carries unnecessary revenue risk. <strong>No logic changes required.</strong></div>
+        </div>
+        <div class="test-pri"><span class="pri-badge pri-high">High</span></div>
+      </div>
+
+      <div class="test-item">
+        <div class="test-num">2</div>
+        <div class="test-body">
+          <div class="test-title">Route No Orders members (no click in 180+ days) out of the promo stream into a re-engagement flow</div>
+          <div class="test-hypo">Daily promos assume purchase intent that No Orders members haven't demonstrated. A re-engagement flow can lead with a stronger offer suited to first-time buyers. Measure first-purchase CVR vs. the promo control group and optout rate delta. Members who don't re-engage after the sequence move to 1×/week cadence. Expected list health benefit: <strong>~1,400 fewer optouts/month</strong> from removing this cohort from daily sends. <strong>Run after holdout establishes the baseline.</strong></div>
+        </div>
+        <div class="test-pri"><span class="pri-badge pri-high">High</span></div>
+      </div>
+
+      <div class="test-item">
+        <div class="test-num">3</div>
+        <div class="test-body">
+          <div class="test-title">Reduce 121+ cadence from daily to 3×/week — start with non-autoship, non-Power Members</div>
+          <div class="test-hypo">Reducing cadence for the lowest-return lapsed segment cuts send volume, optout accumulation, and deliverability risk. Start with non-autoship non-Power Members — this group has the weakest engagement and no autoship cadence to complicate the measurement. Expected list health benefit: <strong>~800–1,000 fewer optouts/month</strong> for this cohort at 3×/week vs. daily. Size the revenue impact against holdout data before setting the final reduction target.</div>
+        </div>
+        <div class="test-pri"><span class="pri-badge pri-high">High</span></div>
+      </div>
+
+      <div class="test-item">
+        <div class="test-num">4</div>
+        <div class="test-body">
+          <div class="test-title">Differentiate cadence for Active (w/ items) members in lapsed windows — after holdout</div>
+          <div class="test-hypo">Active (w/ items) members already purchase consistently via autoship. If holdout confirms low incrementality for this group, reduce to 3×/week at 61-90 and 121+ days (where they return $0.009 and $0.003 RPD respectively) while maintaining daily sends in the 4–30 day window. Their lapsed exposure is smaller than NOT Active — only 14% of their sends are in 121+ or No Orders — so the revenue risk of cadence reduction here is limited. <strong>Run after holdout results confirm the incrementality baseline for this group.</strong></div>
+        </div>
+        <div class="test-pri"><span class="pri-badge pri-medium">Medium</span></div>
+      </div>
+
+      <div class="test-item">
+        <div class="test-num">5</div>
+        <div class="test-body">
+          <div class="test-title">Investigate whether a dedicated flow can drive autoship adoption for Active (no items) members</div>
+          <div class="test-hypo">Active (no items) members are the most responsive autoship group overall ($0.086 RPD) and represent a warm audience — they have accounts but no active subscriptions. The email engagement data supports a targeted effort to prompt subscription adoption, but the conversion path (getting members to add subscribed items) is not a straightforward CRM-only action and likely requires product or lifecycle coordination. Worth investigating what lever drives subscription adoption for this group before building a dedicated flow. Maintain current promo cadence in the meantime; do not suppress.</div>
+        </div>
+        <div class="test-pri"><span class="pri-badge pri-medium">Medium</span></div>
+      </div>
+
+      <div class="test-item">
+        <div class="test-num">6</div>
+        <div class="test-body">
+          <div class="test-title">Tighten No Orders engagement suppression threshold from 30 to 15–20 days inactivity</div>
+          <div class="test-hypo">The current 30-day threshold may route members with recent activity to reduced cadence too early. Tightening to 15–20 days expands the full-cadence audience in the 4–30 day window. Validate against optout rate and CVR before broad rollout.</div>
+        </div>
+        <div class="test-pri"><span class="pri-badge pri-medium">Medium</span></div>
+      </div>
+
+      <div class="test-item">
+        <div class="test-num">7</div>
+        <div class="test-body">
+          <div class="test-title">Add secondary engagement threshold for 121+: no click in 60–90 days → further cadence reduction</div>
+          <div class="test-hypo">121+ members with no click in 60–90 days show near-zero incremental purchase probability. A secondary suppression layer reduces send volume and optout risk with minimal revenue impact. Run after the primary cadence reduction test.<strong>Holdout results will inform the expected revenue trade-off before this threshold is applied.</strong></div>
+        </div>
+        <div class="test-pri"><span class="pri-badge pri-medium">Medium</span></div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+<script>
+
+// ═══ RAW DATA (source of truth — all metrics computed below) ════════
+const RAW = {"months":["2025-01","2025-02","2025-03","2025-04","2025-05","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-02","2026-03","2026-04"],"segs":["1","2","3","4","5","6","7","8-14","15-30","31-60","61-90","91-120","121+","No Orders"],"D":{"1":[176643,138053,114632,157688,82309,622,21668,31354,25432,37985,207216,54410,3664,2555,263,884],"2":[174695,134461,112503,158193,87991,798,50117,59404,56818,51140,206478,52787,14308,2674,216,992],"3":[291459,207635,200260,182653,94774,767,58452,81987,65278,71920,238385,69990,14069,2349,282,903],"4":[352113,230258,222327,189279,175845,99377,147493,131680,143200,218727,348346,209750,242876,185348,177696,197317],"5":[387121,237298,227112,194716,175899,103570,154279,141771,135986,226765,374049,214109,232950,181452,169248,192914],"6":[392319,261448,259606,228390,221121,115077,184715,181776,172307,290727,335573,241060,240058,181507,178332,196809],"7":[392850,282176,276835,299739,452390,243097,375189,379039,378718,472596,546692,465736,471180,385197,384984,424964],"8-14":[3147039,2772453,2875886,3305560,3423518,2802874,3179898,3281488,3203484,3750465,3995652,3369581,3343696,2809738,2857375,3193716],"15-30":[4949436,5353736,5741635,6156701,6071470,6036072,5808459,6245378,6091771,6716541,6716508,5778081,5553083,4877250,4469297,5214614],"31-60":[4101678,3591304,4357235,4659959,4512578,4560801,4809356,4601693,4416456,5273985,5033868,4357415,4548620,3540819,3184000,4109688],"61-90":[2130634,1895460,2077507,2761292,2701176,2710926,2783323,2826650,2310610,2878186,3164999,2589872,2520877,2165747,1833810,2248150],"91-120":[1480397,1216470,1258132,1499694,1797249,1860748,1853873,1858379,1608492,1741713,2017584,1865251,1643717,1317091,1264872,1446353],"121+":[10060884,9019017,9078642,9930343,9574976,10382870,11114009,11580151,10768101,12979693,13612182,12322299,11930845,9783264,8769360,10179023],"No Orders":[6928025,6332644,6527902,7226638,6781197,6874183,6902476,7067335,6737946,8121499,8380662,7041662,6742963,5659190,5251031,5906526]},"Cl":{"1":[1697,1037,904,927,837,9,229,461,229,354,1496,331,24,109,4,42],"2":[1550,900,863,1062,918,27,432,596,557,823,1693,509,182,134,2,57],"3":[2477,1392,1460,1140,921,21,559,881,548,865,2856,757,174,97,5,47],"4":[3032,1513,1586,1222,1825,868,1335,1321,1322,2283,4585,2873,2952,2493,1982,2442],"5":[3331,1618,1650,1236,1689,938,1800,1358,1325,2511,4652,2550,2668,2245,1745,2318],"6":[3443,1955,2046,1663,2082,1028,2186,1752,1687,3478,4250,2682,2854,2208,1801,2436],"7":[3602,2362,2182,2377,3864,1885,3467,3285,3111,4526,6381,4680,4541,3985,3489,4261],"8-14":[53841,47704,45767,51000,49704,46291,59281,54483,57078,66845,76483,62087,58981,53700,45836,57355],"15-30":[46210,46412,48633,48414,47906,48418,49770,52374,49485,52211,55810,45697,48646,44495,36238,43860],"31-60":[35361,22306,26088,27552,28378,26438,29911,30171,26936,31455,32003,23032,33719,26792,19626,29079],"61-90":[13042,10822,8707,12717,12484,13018,12628,15379,13381,13410,15110,9772,12908,13545,9997,11591],"91-120":[8127,5200,5397,5720,7438,7476,7843,8470,6741,7025,8418,6347,7620,6730,6740,7862],"121+":[52870,32745,29010,32583,30193,34905,38773,44862,33974,43215,47276,37024,49676,44638,40653,44430],"No Orders":[50509,34305,31140,33442,31343,32808,36260,40057,31780,42025,46419,38126,49744,47739,45572,47403]},"Pu":{"1":[39,40,18,42,35,0,7,23,6,29,41,21,0,1,0,0],"2":[39,17,27,26,24,0,23,13,19,21,48,20,1,1,0,0],"3":[58,235,24,33,27,0,34,44,19,33,77,22,1,1,0,0],"4":[89,54,46,57,43,30,38,60,39,80,189,107,69,52,40,52],"5":[80,94,53,53,69,105,121,66,49,120,322,107,68,57,38,53],"6":[114,50,53,52,83,36,91,131,66,339,189,113,72,64,40,100],"7":[96,87,101,108,94,68,105,113,81,175,214,153,108,74,59,107],"8-14":[21389,22140,19673,21885,19232,20935,27013,24958,27004,30972,33111,27082,25315,23562,18768,24610],"15-30":[1881,1972,1887,2056,1818,1858,2117,2168,1966,2246,2357,1965,1727,1416,1087,1518],"31-60":[1362,907,961,1068,924,992,1197,1127,1048,1045,1122,884,982,661,501,749],"61-90":[479,398,243,369,324,520,419,1035,1065,578,426,239,332,290,144,232],"91-120":[221,175,138,120,150,241,214,442,331,234,233,140,184,119,102,133],"121+":[520,347,298,332,266,565,380,925,748,444,533,308,319,249,183,259],"No Orders":[207,136,111,116,83,75,92,132,142,160,211,101,117,100,66,71]},"Re":{"1":[4283.61,2829.45,1933.29,3761.77,2696.86,0,1004.47,2782.52,632.07,2289.95,3711.05,1398.04,0,182.82,0,0],"2":[3244.89,1432.94,2798.24,1962.63,1665.31,0,2533.89,1320.69,1602.05,2014.22,5261.02,1109.48,169.93,90.12,0,0],"3":[5324.26,15293.75,2411.29,3165.09,4181.42,0,3829.97,4475.01,1554.88,2678.38,5712.14,1475.03,251.99,54.37,0,0],"4":[8015.75,4954.22,4161.79,5056.43,3765.21,3389.33,4067.48,5153.61,3281.54,6287.18,16901.38,7828.54,6246.05,4473.63,3051.27,4663.15],"5":[7994.61,9428.85,4811.11,5250.22,5632.57,9722.13,9093.44,6242.93,4425.61,8608.96,22807.73,8776.87,6383.04,4721.34,3248.05,5253.05],"6":[9987.32,4568.24,4458.71,5193.62,7616.25,2879.72,11921.58,10158.99,6073.56,23629.02,15545.86,7813.37,6660.01,5249.81,3261.06,8131.22],"7":[9445.75,9533.0,10031.83,12890.46,8847.71,6612.09,11884.76,9732.58,7794.95,15461.38,16842.65,12229.36,9607.81,7951.58,5067.25,10041.65],"8-14":[2021861.18,1966338.24,1774963.85,1976413.04,1760865.73,1832045.57,2501161.16,2231131.36,2328133.45,2639727.99,2896336.76,2250043.92,2274933.21,2084481.67,1676554.74,2227056.17],"15-30":[196865.46,204731.15,201573.88,215608.44,194523.23,191570.62,214674.03,217213.10,195796.58,216830.62,230816.36,181017.0,179506.95,151353.44,114241.13,158487.91],"31-60":[137322.23,92952.32,97405.0,109786.01,97893.22,104348.81,124759.23,117578.78,100489.58,99187.62,111661.84,82132.62,98074.24,67436.21,50221.79,76124.78],"61-90":[51035.07,40238.17,26735.96,35674.39,32698.77,49861.53,46969.55,100080.21,119528.88,52207.93,39454.90,22638.19,34191.90,28760.99,14140.66,23292.40],"91-120":[25586.68,18411.39,13935.65,11618.88,16188.25,23996.60,20881.89,42253.91,30945.56,20942.31,22333.56,13366.28,17024.16,11927.63,11016.23,13522.96],"121+":[51942.19,34490.60,27095.43,33652.91,26602.59,47844.37,37787.05,85897.58,63911.56,40444.09,43634.92,26681.23,30164.94,22936.92,16355.89,23752.34],"No Orders":[16872.55,10629.25,9392.33,10578.98,7258.98,6756.31,8499.93,13045.52,10099.74,12604.99,17461.25,6859.77,10191.85,7859.11,4981.34,6950.51]},"Op":{"1":[21,10,7,17,5,0,3,1,5,4,30,6,1,1,0,1],"2":[33,23,9,20,6,0,4,6,0,6,27,11,4,0,0,0],"3":[45,31,30,13,7,1,2,10,4,6,26,15,2,1,0,0],"4":[50,35,28,18,8,10,16,11,6,34,44,28,25,23,15,17],"5":[54,41,41,18,15,10,14,11,9,26,49,19,32,23,16,12],"6":[72,28,39,27,17,9,18,21,14,24,39,25,20,11,9,15],"7":[77,34,39,47,56,32,53,50,51,55,56,60,58,38,24,42],"8-14":[436,373,384,372,383,311,334,358,359,449,454,323,401,279,259,245],"15-30":[704,685,680,718,647,693,623,683,651,771,682,625,670,470,429,430],"31-60":[657,424,538,609,583,559,547,520,466,648,616,528,544,392,294,372],"61-90":[346,260,271,403,340,382,335,391,281,379,406,356,357,263,218,236],"91-120":[316,194,196,248,273,264,247,264,219,274,304,338,302,177,147,172],"121+":[2077,1300,1305,2041,1354,1390,1569,1726,1453,1770,1945,1906,2280,1262,1030,1113],"No Orders":[1889,1301,1474,2398,1335,1308,1345,1406,1336,1578,1519,1276,1608,1092,870,956]}};
+
+const MONTHS = RAW.months;
+const SEGS   = RAW.segs;
+const N      = MONTHS.length;
+const SUPP   = new Set(['1','2','3']);
+const APR_IDX = MONTHS.indexOf('2026-04');
+
+const SEG_LABELS = {
+  '1':'1 day','2':'2 days','3':'3 days','4':'4 days','5':'5 days',
+  '6':'6 days','7':'7 days','8-14':'8-14 days','15-30':'15-30 days',
+  '31-60':'31-60 days','61-90':'61-90 days','91-120':'91-120 days',
+  '121+':'121+ days','No Orders':'No Orders'
+};
+
+const PALETTE = [
+  '#3D6B65','#6EA89E','#A7CBC5','#C07B54','#E0A882',
+  '#4A5FA8','#8B9FD0','#B85C1A','#7BA098','#9B8DC0',
+  '#2A4D48','#C8927A','#5B8A84','#D4956A'
+];
+
+// ── Compute metrics from raw ──────────────────────────────────────────
+function sd(src, seg, i) { return src[seg][i] || 0; }
+function safeDiv(n, d) { return d > 0 ? n / d : 0; }
+
+function computeMetric(num, den, mult=1) {
+  const res = {};
+  for (const s of SEGS) {
+    res[s] = MONTHS.map((_, i) => safeDiv(sd(num,s,i), sd(den,s,i)) * mult);
+  }
+  return res;
+}
+
+function pctShare(src) {
+  const res = {};
+  SEGS.forEach(s => { res[s] = []; });
+  for (let i = 0; i < N; i++) {
+    const tot = SEGS.reduce((a, s) => a + sd(src, s, i), 0);
+    for (const s of SEGS) {
+      res[s].push(tot > 0 ? sd(src, s, i) / tot * 100 : 0);
+    }
+  }
+  return res;
+}
+
+const CTR    = computeMetric(RAW.Cl, RAW.D, 100);
+const PCVR   = computeMetric(RAW.Pu, RAW.D, 100);
+const RPD    = computeMetric(RAW.Re, RAW.D, 1);
+const AOV    = computeMetric(RAW.Re, RAW.Pu, 1);
+const OPTOUT = computeMetric(RAW.Op, RAW.D, 100);
+const DEL_PCT = pctShare(RAW.D);
+const CLK_PCT = pctShare(RAW.Cl);
+const PUR_PCT = pctShare(RAW.Pu);
+const REV_PCT = pctShare(RAW.Re);
+const OPT_PCT = pctShare(RAW.Op);
+
+function avgNZ(vals) {
+  const nz = vals.filter(v => v > 0);
+  return nz.length ? nz.reduce((a,b) => a+b, 0) / nz.length : 0;
+}
+
+// Update KPI values
+const kpiRpd = document.getElementById('kpi-rpd'); if (kpiRpd) kpiRpd.textContent = '$' + avgNZ(RPD['8-14']).toFixed(2);
+const kpiCtr = document.getElementById('kpi-ctr'); if (kpiCtr) kpiCtr.textContent = avgNZ(CTR['8-14']).toFixed(2) + '%';
+
+// ── STACKED CHART ─────────────────────────────────────────────────────
+let activeMetricKey = 'D';
+let stackChart = null;
+
+const PCT_MAP = { D: DEL_PCT, Cl: CLK_PCT, Pu: PUR_PCT, Re: REV_PCT, Op: OPT_PCT };
+
+function getDatasets(key) {
+  const pct = PCT_MAP[key];
+  return SEGS.map((s, i) => ({
+    label: SEG_LABELS[s],
+    data: pct[s],
+    backgroundColor: PALETTE[i],
+    borderColor: 'transparent',
+    borderWidth: 0,
+  }));
+}
+
+function monthLabel(m) {
+  const [y, mo] = m.split('-');
+  return (y === '2026' ? "'26-" : '') + mo;
+}
+
+function buildStackChart() {
+  const ctx = document.getElementById('stackChart').getContext('2d');
+  if (stackChart) stackChart.destroy();
+  stackChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: MONTHS.map(monthLabel),
+      datasets: getDatasets(activeMetricKey)
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      animation: { duration: 300 },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          mode: 'index',
+          callbacks: {
+            label: c => ` ${c.dataset.label}: ${c.parsed.y.toFixed(1)}%`,
+            afterBody: (items) => {
+              const idx = items[0].dataIndex;
+              if (idx === APR_IDX) return ['', '▲ April 2026 (new data)'];
+              return [];
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          stacked: true,
+          grid: { color: 'rgba(0,0,0,0.05)' },
+          ticks: { color: '#7A8E8C', font: { family: 'JetBrains Mono', size: 10 } }
+        },
+        y: {
+          stacked: true, max: 100,
+          grid: { color: 'rgba(0,0,0,0.06)' },
+          ticks: { color: '#7A8E8C', font: { family: 'JetBrains Mono', size: 10 }, callback: v => v + '%' }
+        }
+      }
+    }
+  });
+
+  // Highlight April 2026 bar via plugin (add amber border)
+  stackChart.options.plugins.annotation = {};
+}
+
+function buildLegend() {
+  document.getElementById('legend').innerHTML = SEGS.map((s, i) =>
+    `<div class="leg-item"><div class="leg-dot" style="background:${PALETTE[i]}"></div>${SEG_LABELS[s]}</div>`
+  ).join('');
+}
+
+document.getElementById('chartTabs').addEventListener('click', e => {
+  const btn = e.target.closest('.tab');
+  if (!btn) return;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  btn.classList.add('on');
+  activeMetricKey = btn.dataset.m;
+  buildStackChart();
+});
+
+// Initialize chart after full page load (Chart.js CDN must be ready)
+window.addEventListener('load', function() {
+  buildLegend();
+  buildStackChart();
+
+  // Wire chart metric buttons
+  document.querySelectorAll('.btn-metric').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.btn-metric').forEach(function(b) { b.classList.remove('active'); });
+      this.classList.add('active');
+      activeMetricKey = this.dataset.metric;
+      buildStackChart();
+    });
+  });
+});
+
+// ── RATE TABLE ────────────────────────────────────────────────────────
+let currentMetric = 'ctr';
+let heatMode = 'row';
+
+const METRIC_MAP = {
+  ctr:    { data: CTR,    fmt: v => v.toFixed(2) + '%',  inv: false, label: 'CTR' },
+  pcvr:   { data: PCVR,   fmt: v => v.toFixed(4) + '%',  inv: false, label: 'Purchase CVR' },
+  optout: { data: OPTOUT, fmt: v => v.toFixed(4) + '%',  inv: true,  label: 'Optout %' },
+  rpd:    { data: RPD,    fmt: v => '$' + v.toFixed(4),   inv: false, label: 'Rev/Delivered' },
+  aov:    { data: AOV,    fmt: v => v > 0 ? '$' + v.toFixed(0) : '—', inv: false, label: 'AOV' },
+};
+
+function heatColor(v, min, max, inv) {
+  if (heatMode === 'none' || max === min || v === 0) return '';
+  const t = (v - min) / (max - min);
+  const intensity = inv ? t : t;
+  const r = inv ? Math.round(80 + intensity * 160) : Math.round(220 - intensity * 160);
+  const g = inv ? Math.round(220 - intensity * 160) : Math.round(80 + intensity * 160);
+  return `background:rgba(${r},${g},80,0.18)`;
+}
+
+function buildTable() {
+  const cfg = METRIC_MAP[currentMetric];
+  const data = cfg.data;
+  const inv = cfg.inv;
+
+  // Header
+  document.getElementById('tblHead').innerHTML = `<tr>
+    <th>Segment</th>
+    ${MONTHS.map((m, i) => `<th${i===APR_IDX?' style="color:var(--amber)"':''}>
+      ${monthLabel(m)}${i===APR_IDX?'<br><span style="color:var(--amber);font-size:0.55rem">NEW</span>':''}
+    </th>`).join('')}
+    <th>AVG</th>
+  </tr>`;
+
+  const allVals = SEGS.flatMap(s => data[s].filter(v => v > 0));
+  const gMin = Math.min(...allVals), gMax = Math.max(...allVals);
+
+  document.getElementById('tblBody').innerHTML = SEGS.map(seg => {
+    const vals = data[seg];
+    const nz = vals.filter(v => v > 0);
+    const rowAvg = nz.length ? nz.reduce((a,b)=>a+b,0)/nz.length : 0;
+    const rowMin = nz.length ? Math.min(...nz) : 0;
+    const rowMax = nz.length ? Math.max(...nz) : 0;
+
+    const cells = vals.map((v, mi) => {
+      const colVals = SEGS.map(s => data[s][mi]).filter(x => x > 0);
+      const colMin = colVals.length ? Math.min(...colVals) : 0;
+      const colMax = colVals.length ? Math.max(...colVals) : 0;
+      const min = heatMode === 'row' ? rowMin : heatMode === 'col' ? colMin : gMin;
+      const max = heatMode === 'row' ? rowMax : heatMode === 'col' ? colMax : gMax;
+      const style = v > 0 ? heatColor(v, min, max, inv) : '';
+      const aprClass = mi === APR_IDX ? ' class="apr-highlight"' : '';
+      return `<td${aprClass} style="${style}">${v > 0 ? cfg.fmt(v) : '—'}</td>`;
+    }).join('');
+
+    const suppTag = SUPP.has(seg) ? `<span class="supp-tag">⚠ suppressed</span>` : '';
+    const rowClass = SUPP.has(seg) ? ' class="suppressed"' : '';
+    return `<tr${rowClass}><td>${SEG_LABELS[seg]}${suppTag}</td>${cells}<td class="avg-cell">${rowAvg > 0 ? cfg.fmt(rowAvg) : '—'}</td></tr>`;
+  }).join('');
+}
+
+document.getElementById('metricSel').addEventListener('change', e => { currentMetric = e.target.value; buildTable(); });
+document.getElementById('heatSel').addEventListener('change', e => { heatMode = e.target.value; buildTable(); });
+buildTable();
+
+
+
+
+// ═══ VOLUME DATA FOR DIMENSION TABLES ════════════════════════════════
+const DIM_AUD_VOL = {
+  del: {
+    'Onboarding':      [0.08,0.35,0.93,0.87,0.61,0.46,4.21,6.86],
+    'Habit Formation': [0.19,0.76,1.46,1.31,0.82,0.56,3.61,0.00],
+    'Power Members':   [0.79,2.13,3.42,2.22,1.07,0.61,3.01,0.00],
+  },
+  pct: {
+    'Onboarding':      [7.5,10.8,15.9,19.8,24.3,28.5,38.9,100.0],
+    'Habit Formation': [17.9,23.5,25.2,29.8,32.9,34.3,33.4,0.0],
+    'Power Members':   [74.5,65.7,58.8,50.4,42.8,37.2,27.8,0.0],
+  },
+};
+const DIM_AS_VOL = {
+  del: {
+    'Active (w/ items)': [0.44,1.74,3.21,1.83,0.83,0.46,1.19,0.07],
+    'Active (no items)': [0.35,0.84,1.49,1.14,0.64,0.40,1.85,1.52],
+    'NOT Active':        [0.27,0.66,1.11,1.43,1.04,0.77,7.79,5.26],
+  },
+  pct: {
+    'Active (w/ items)': [41.5,53.6,55.2,41.5,33.0,28.2,11.0,1.1],
+    'Active (no items)': [33.0,26.0,25.7,25.9,25.5,24.6,17.1,22.2],
+    'NOT Active':        [25.5,20.4,19.1,32.5,41.6,47.2,71.9,76.7],
+  },
+};
+
+// ═══ OVERALL (PROGRAM-WIDE) ROW DATA ═════════════════════════════════
+const DIM_OVERALL = {
+  rpd:  {'4-7':0.0311,'8-14':0.6712,'15-30':0.0334,'31-60':0.0225,'61-90':0.0181,'91-120':0.0122,'121+':0.0036,'No Orders':0.0015},
+  pcvr: {'4-7':0.0362,'8-14':0.7555,'15-30':0.0327,'31-60':0.0223,'61-90':0.0179,'91-120':0.0123,'121+':0.0039,'No Orders':0.0018},
+  aov:  {'4-7':85.9,'8-14':88.85,'15-30':102.03,'31-60':100.93,'61-90':101.16,'91-120':98.82,'121+':91.85,'No Orders':83.36},
+  opt:  {'4-7':0.0148,'8-14':0.0111,'15-30':0.0111,'31-60':0.0119,'61-90':0.0132,'91-120':0.0153,'121+':0.0149,'No Orders':0.0209},
+  del:  {'4-7':1.06,'8-14':3.25,'15-30':5.95,'31-60':4.59,'61-90':2.56,'91-120':1.64,'121+':10.73,'No Orders':6.85},
+  pct:  {'4-7':2.9,'8-14':8.9,'15-30':16.2,'31-60':12.5,'61-90':7.0,'91-120':4.5,'121+':29.3,'No Orders':18.7},
+};
+
+// ═══ DIMENSION DATA (Audience Tier + Autoship Status) ════════════════
+const DIM_AUD = {
+  segs: ['4-7','8-14','15-30','31-60','61-90','91-120','121+','No Orders'],
+  cols: ['Onboarding','Habit Formation','Power Members'],
+  colLabels: {'Onboarding':'Onboarding<br><small>0–2 orders</small>','Habit Formation':'Habit Formation<br><small>3–7 orders</small>','Power Members':'Power Members<br><small>8+ orders</small>'},
+  vol: DIM_AUD_VOL,
+  metrics: {
+    rpd: {
+      'Onboarding':      [0.0181,0.3287,0.0265,0.0098,0.0051,0.0041,0.0010,0.0014],
+      'Habit Formation': [0.0143,0.4089,0.0259,0.0149,0.0109,0.0082,0.0030,0.0473],
+      'Power Members':   [0.0359,0.8166,0.0382,0.0318,0.0307,0.0218,0.0078,0.2204],
+    },
+    pcvr: {
+      'Onboarding':      [0.0213,0.3752,0.0273,0.0105,0.0054,0.0043,0.0013,0.0017],
+      'Habit Formation': [0.0169,0.4722,0.0265,0.0158,0.0121,0.0091,0.0033,0.0449],
+      'Power Members':   [0.0404,0.9130,0.0365,0.0305,0.0291,0.0212,0.0082,0.2167],
+    },
+    aov: {
+      'Onboarding':      [85.3,87.6,96.9,93.1,94.4,95.2,82.9,83.2],
+      'Habit Formation': [84.4,86.6,97.7,93.8,90.0,90.1,89.1,105.5],
+      'Power Members':   [88.8,89.4,104.5,104.1,105.4,102.9,95.2,101.7],
+    },
+    opt: {
+      'Onboarding':      [0.0468,0.0353,0.0283,0.0225,0.0210,0.0223,0.0176,0.0209],
+      'Habit Formation': [0.0186,0.0143,0.0123,0.0131,0.0141,0.0157,0.0145,0.0112],
+      'Power Members':   [0.0065,0.0060,0.0058,0.0070,0.0079,0.0093,0.0115,0.0342],
+    },
+    delmo: {
+      'Onboarding':      [0.08,0.35,0.91,0.86,0.57,0.44,4.24,6.84],
+      'Habit Formation': [0.19,0.71,1.69,1.42,0.93,0.59,3.90,0.00],
+      'Power Members':   [0.79,2.14,3.73,2.35,1.13,0.63,3.27,0.00],
+    },
+  },
+  overall: {
+    rpd:  { 'Onboarding': 0.0117, 'Habit Formation': 0.0412, 'Power Members': 0.1539 },
+    pcvr: { 'Onboarding': 0.0132, 'Habit Formation': 0.0466, 'Power Members': 0.1687 },
+    aov:  { 'Onboarding': 88.7,   'Habit Formation': 88.4,   'Power Members': 91.2 },
+    opt:  { 'Onboarding': 0.0209, 'Habit Formation': 0.0139, 'Power Members': 0.0078 },
+    del:  { 'Onboarding': 14.2,   'Habit Formation': 9.2,    'Power Members': 13.3 },
+  },
+  vol: {
+    del: {
+      'Onboarding':      [0.08,0.35,0.91,0.86,0.57,0.44,4.24,6.84],
+      'Habit Formation': [0.19,0.71,1.69,1.42,0.93,0.59,3.90,0.00],
+      'Power Members':   [0.79,2.14,3.73,2.35,1.13,0.63,3.27,0.00],
+    },
+    pct: {
+      'Onboarding':      [7.5,10.9,14.4,18.6,21.7,26.5,37.2,100.0],
+      'Habit Formation': [17.9,22.2,26.7,30.7,35.4,35.5,34.2,0.0],
+      'Power Members':   [74.5,66.9,58.9,50.8,43.0,38.0,28.7,0.0],
+    },
+  }
+};
+
+const DIM_AS = {
+  segs: ['4-7','8-14','15-30','31-60','61-90','91-120','121+','No Orders'],
+  cols: ['Active (w/ items)','Active (no items)','NOT Active'],
+  colLabels: {
+    'Active (w/ items)': 'Active<br><small>with subscribed items</small>',
+    'Active (no items)': 'Active<br><small>no subscribed items</small>',
+    'NOT Active':        'NOT Active<br><small>no autoship</small>',
+  },
+  vol: DIM_AS_VOL,
+  metrics: {
+    rpd: {
+      'Active (w/ items)': [0.0213,0.3425,0.0273,0.0144,0.0094,0.0072,0.0027,0.0095],
+      'Active (no items)': [0.0296,0.6797,0.0330,0.0224,0.0162,0.0113,0.0036,0.0020],
+      'NOT Active':        [0.0526,1.5086,0.0507,0.0326,0.0259,0.0154,0.0037,0.0012],
+    },
+    pcvr: {
+      'Active (w/ items)': [0.0205,0.3743,0.0263,0.0147,0.0103,0.0075,0.0031,0.0143],
+      'Active (no items)': [0.0325,0.7623,0.0315,0.0220,0.0170,0.0120,0.0042,0.0024],
+      'NOT Active':        [0.0624,1.7278,0.0521,0.0319,0.0242,0.0152,0.0039,0.0014],
+    },
+    aov: {
+      'Active (w/ items)': [103.6,91.5,103.7,98.0,91.6,95.9,88.3,66.2],
+      'Active (no items)': [90.9,89.2,104.8,101.8,95.5,94.3,85.5,83.3],
+      'NOT Active':        [84.4,87.3,97.4,102.1,106.9,101.6,94.0,85.8],
+    },
+    opt: {
+      'Active (w/ items)': [0.0132,0.0113,0.0109,0.0106,0.0110,0.0115,0.0104,0.0677],
+      'Active (no items)': [0.0070,0.0079,0.0089,0.0112,0.0124,0.0155,0.0167,0.0284],
+      'NOT Active':        [0.0149,0.0148,0.0144,0.0141,0.0153,0.0173,0.0151,0.0180],
+    },
+    delmo: {
+      'Active (w/ items)': [0.44,1.76,3.30,1.90,0.87,0.47,1.35,0.08],
+      'Active (no items)': [0.35,0.83,1.41,1.12,0.60,0.39,1.89,1.47],
+      'NOT Active':        [0.27,0.67,1.09,1.40,1.00,0.73,7.41,5.19],
+    },
+  },
+  overall: {
+    rpd:  { 'Active (w/ items)': 0.0758, 'Active (no items)': 0.0858, 'NOT Active': 0.0673 },
+    pcvr: { 'Active (w/ items)': 0.0815, 'Active (no items)': 0.0947, 'NOT Active': 0.0758 },
+    aov:  { 'Active (w/ items)': 93.0,   'Active (no items)': 90.6,   'NOT Active': 88.9 },
+    opt:  { 'Active (w/ items)': 0.0113, 'Active (no items)': 0.0154, 'NOT Active': 0.0159 },
+    del:  { 'Active (w/ items)': 9.7,    'Active (no items)': 7.7,    'NOT Active': 17.5 },
+  },
+  vol: {
+    del: {
+      'Active (w/ items)': [0.44,1.76,3.30,1.90,0.87,0.47,1.35,0.08],
+      'Active (no items)': [0.35,0.83,1.41,1.12,0.60,0.39,1.89,1.47],
+      'NOT Active':        [0.27,0.67,1.09,1.40,1.00,0.73,7.41,5.19],
+    },
+    pct: {
+      'Active (w/ items)': [41.5,54.0,56.9,43.0,35.2,29.6,12.7,1.2],
+      'Active (no items)': [33.0,25.5,24.3,25.3,24.3,24.5,17.7,21.8],
+      'NOT Active':        [25.5,20.6,18.8,31.7,40.5,45.9,69.6,77.0],
+    },
+  }
+};
+
+const DIM_METRIC_LABELS = {
+  rpd:  'Rev / Delivered',
+  pcvr: 'Purchase CVR',
+  aov:  'AOV',
+  opt:  'Optout %',
+};
+
+const DIM_METRIC_FMT = {
+  rpd:  v => v === null ? '—' : '$' + v.toFixed(4),
+  pcvr: v => v === null ? '—' : v.toFixed(4) + '%',
+  aov:  v => v === null ? '—' : '$' + v.toFixed(0),
+  opt:  v => v === null ? '—' : v.toFixed(4) + '%',
+  delmo: v => v === null ? '—' : v.toFixed(2) + 'M',
+};
+
+function buildDimTable(dimData, containerId, metricKey) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  const segs = dimData.segs;
+  const cols = dimData.cols;
+  const isVol = (metricKey === 'del' || metricKey === 'pct');
+  const isOpt = (metricKey === 'opt');
+
+  // Get values — vol metrics come from dimData.vol, others from dimData.metrics
+  function getVals(col) {
+    if (isVol) return dimData.vol[metricKey][col];
+    return dimData.metrics[metricKey][col];
+  }
+
+  // Format values
+  const fmtMap = {
+    rpd:  v => v === null ? '—' : '$' + v.toFixed(4),
+    pcvr: v => v === null ? '—' : v.toFixed(4) + '%',
+    aov:  v => v === null ? '—' : '$' + v.toFixed(0),
+    opt:  v => v === null ? '—' : v.toFixed(4) + '%',
+    del:  v => v === null ? '—' : v.toFixed(2) + 'M',
+    pct:  v => v === null ? '—' : v.toFixed(1) + '%',
+  };
+  const fmt = fmtMap[metricKey];
+
+  // Overall row value — header label changes per metric type to clarify meaning
+  const overallFmt = fmtMap[metricKey];
+  function getOverall(seg) {
+    const v = DIM_OVERALL[metricKey] ? DIM_OVERALL[metricKey][seg] : null;
+    return v !== null && v !== undefined ? overallFmt(v) : '—';
+  }
+
+  // Heatmap: per row, green = best, red = worst
+  // For opt: invert (lower = better = green)
+  const rows = segs.map((seg, i) => {
+    const rowVals = cols.map(c => getVals(c)[i]).filter(v => v !== null);
+    const best  = rowVals.length ? Math.max(...rowVals) : null;
+    const worst = rowVals.length ? Math.min(...rowVals) : null;
+    return { seg, best, worst };
+  });
+
+  const thead = `<tr>
+    <th style="text-align:left;min-width:80px">Segment</th>
+    <th style="color:var(--muted);font-weight:600">${isVol ? (metricKey === 'pct' ? '% of all sends' : 'Total del/mo') : 'Overall'}</th>
+    ${cols.map(c => `<th>${dimData.colLabels[c]}</th>`).join('')}
+  </tr>`;
+
+  const tbody = segs.map((seg, i) => {
+    const { best, worst } = rows[i];
+    const cells = cols.map(c => {
+      const v = getVals(c)[i];
+      let cls = '';
+      if (v !== null && best !== worst) {
+        const isBest  = isOpt ? (v === worst) : (v === best);
+        const isWorst = isOpt ? (v === best)  : (v === worst);
+        if (isBest)  cls = 'cell-hi';
+        if (isWorst) cls = 'cell-lo';
+      }
+      return `<td class="${cls}">${fmt(v)}</td>`;
+    });
+    const rowCls = (seg === '121+' || seg === 'No Orders') ? 'dim-warn' : (seg === '4-7' || seg === '8-14' ? 'dim-best' : '');
+    return `<tr class="${rowCls}">
+      <td>${seg}</td>
+      <td style="color:var(--muted2);font-weight:600">${getOverall(seg)}</td>
+      ${cells.join('')}
+    </tr>`;
+  }).join('');
+
+  // Overall row: weighted average per column across all segments
+  const overallRowHtml = (() => {
+    const ov = dimData.overall ? dimData.overall[metricKey] : null;
+    if (!ov) return '';
+    const oVals = cols.map(c => ov[c]);
+    const oNonNull = oVals.filter(v => v !== null && v !== undefined);
+    const oMax = oNonNull.length ? Math.max(...oNonNull) : null;
+    const oMin = oNonNull.length ? Math.min(...oNonNull) : null;
+    const oBest  = isOpt ? oMin : oMax;
+    const oWorst = isOpt ? oMax : oMin;
+    const oCells = cols.map(c => {
+      const v = ov[c];
+      let cls = '';
+      if (v !== null && v !== undefined && oBest !== oWorst) {
+        if (v === oBest)  cls = 'cell-hi';
+        if (v === oWorst) cls = 'cell-lo';
+      }
+      const fmtd = fmt(v !== null && v !== undefined ? v : null);
+      return `<td class="${cls}" style="font-weight:600">${fmtd}</td>`;
+    });
+    // Overall col from DIM_OVERALL uses program-wide total (null for overall row)
+    return `<tr class="dim-overall"><td style="font-weight:600;font-style:italic">All segments</td><td style="color:var(--muted2);font-weight:600">—</td>${oCells.join('')}</tr>`;
+  })();
+
+  container.querySelector('thead').innerHTML = thead;
+  container.querySelector('tbody').innerHTML = overallRowHtml + tbody;
+}
+
+function initDimTables() {
+  ['aud','as'].forEach(id => {
+    const sel = document.getElementById('dim-sel-' + id);
+    if (!sel) return;
+    // Merge vol data into dimData so buildDimTable can access it
+    const base = id === 'aud' ? DIM_AUD : DIM_AS;
+    const vol  = id === 'aud' ? DIM_AUD_VOL : DIM_AS_VOL;
+    const dimData = Object.assign({}, base, { vol: vol });
+    buildDimTable(dimData, 'dim-tbl-' + id, sel.value);
+    sel.addEventListener('change', function() {
+      buildDimTable(dimData, 'dim-tbl-' + id, this.value);
+    });
+  });
+}
+
+// ── SNAPSHOT TABLE ────────────────────────────────────────────────────
+function buildSnapTable() {
+  const snapSegs = [
+    { key: '4-7',      segs: ['4','5','6','7'],   label: '4-7 days',      cls: '' },
+    { key: '8-14',     segs: ['8-14'],             label: '8-14 days',     cls: 'snap-best' },
+    { key: '15-30',    segs: ['15-30'],            label: '15-30 days',    cls: '' },
+    { key: '31-60',    segs: ['31-60'],            label: '31-60 days',    cls: '' },
+    { key: '61-90',    segs: ['61-90'],            label: '61-90 days',    cls: '' },
+    { key: '91-120',   segs: ['91-120'],           label: '91-120 days',   cls: '' },
+    { key: '121+',     segs: ['121+'],             label: '121+ days',     cls: 'snap-warn' },
+    { key: 'noorders', segs: ['No Orders'],        label: 'No Orders',     cls: 'snap-warn' },
+  ];
+
+  const tbody = document.getElementById('snapBody');
+  tbody.innerHTML = snapSegs.map(({ segs: segList, label, cls }) => {
+    // Aggregate across sub-segments per month
+    const ctrs=[], pcvrs=[], rpds=[], aovs=[], opts=[], dels=[], dpcts=[];
+    for (let i = 0; i < N; i++) {
+      const d = segList.reduce((a,s)=>a+sd(RAW.D,s,i),0);
+      const cl= segList.reduce((a,s)=>a+sd(RAW.Cl,s,i),0);
+      const pu= segList.reduce((a,s)=>a+sd(RAW.Pu,s,i),0);
+      const re= segList.reduce((a,s)=>a+sd(RAW.Re,s,i),0);
+      const op= segList.reduce((a,s)=>a+sd(RAW.Op,s,i),0);
+      const totD = SEGS.reduce((a,s)=>a+sd(RAW.D,s,i),0);
+      if (d>0) { ctrs.push(cl/d*100); pcvrs.push(pu/d*100); rpds.push(re/d); opts.push(op/d*100); dels.push(d); dpcts.push(d/totD*100); }
+      if (pu>0) aovs.push(re/pu);
+    }
+    const a = v => v.length ? v.reduce((a,b)=>a+b,0)/v.length : 0;
+    const fmt = (v,dec,pre='',suf='') => v>0 ? pre+v.toFixed(dec)+suf : '—';
+    return `<tr class="${cls}">
+      <td>${label}</td>
+      <td>${dels.length ? (a(dels)/1e6).toFixed(1)+'M' : '—'}</td>
+      <td>${fmt(a(dpcts),1,'','%')}</td>
+      <td>${fmt(a(ctrs),2,'','%')}</td>
+      <td>${fmt(a(pcvrs),4,'','%')}</td>
+      <td>${fmt(a(rpds),4,'$')}</td>
+      <td>${aovs.length ? '$'+a(aovs).toFixed(0) : '—'}</td>
+      <td>${fmt(a(opts),4,'','%')}</td>
+    </tr>`;
+  }).join('');
+}
+// Ensure DOM is ready for table and chart
+document.addEventListener('DOMContentLoaded', function() {
+  buildSnapTable();
+  initDimTables();
+});
+
+// Tab switching handled by CSS :has() radio approach
+
+
+</script>
+</body>
+</html>
