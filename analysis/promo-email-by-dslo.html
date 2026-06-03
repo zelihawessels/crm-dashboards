@@ -11,6 +11,10 @@
   border-top: 2px solid rgba(61,107,101,0.25) !important;
   border-bottom: 2px solid rgba(61,107,101,0.25) !important;
 }
+.dim-ordering > td {
+  background: rgba(61,107,101,0.04) !important;
+  border-bottom: 1px dashed rgba(61,107,101,0.2) !important;
+}
 F-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Promo Email — Days Since Last Order | Jan 2025–Apr 2026</title>
@@ -573,7 +577,7 @@ body:has(#ctrl-audience:checked)  label[for="ctrl-audience"]  { color: var(--bra
         </div>
         <div class="exec-bullet">
           <span class="exec-label">Autoship status and email response</span>
-          <span class="exec-text">Within the 8–14 day window, NOT Active members are the most responsive to promos ($1.51 RPD) and Active (w/ items) the least ($0.34). But overall program RPD tells a different story: Active (no items) leads ($0.086), Active (w/ items) middle ($0.076), NOT Active lowest ($0.067). The reason: NOT Active members purchase more sporadically, so at any given time most of them are lapsed — their sends are concentrated in 121+ and No Orders where per-send returns approach zero. Active (no items) members purchase more consistently, so more of their sends fall in productive recency windows, producing a higher overall RPD despite lower per-window responsiveness. NOT Active members return $1.51 RPD at 8-14 days — the highest of any autoship group in the active window — but only $0.004 and $0.001 RPD once they lapse into 121+ and No Orders. At 7.8M/month in 121+ and 5.3M/month in No Orders at near-zero return, their lapsed sends account for a disproportionate share of program volume, making suppression of this group the highest-ROI action.</span>
+          <span class="exec-text">Within the 8–14 day window, NOT Active members are the most responsive to promos ($1.51 RPD) and Active (w/ items) the least ($0.34). But overall program RPD tells a different story: Active (no items) leads ($0.086), Active (w/ items) middle ($0.076), NOT Active lowest ($0.067). The reason: NOT Active members purchase more sporadically — their sends are concentrated in 121+ and No Orders where per-send returns approach zero. Excluding No Orders, NOT Active recovers to $0.090, above Active (w/ items) at $0.076, which shows that among ordering members specifically, NOT Active are more valuable per send. Active (no items) members purchase more consistently, producing the highest RPD at both the overall and ordering-only levels. NOT Active members return $1.51 RPD at 8-14 days — the highest of any autoship group in the active window — but only $0.004 and $0.001 RPD once they lapse into 121+ and No Orders. At 7.8M/month in 121+ and 5.3M/month in No Orders at near-zero return, their lapsed sends account for a disproportionate share of program volume, making suppression of this group the highest-ROI action.</span>
         </div>
       </div>
       <div class="exec-next-steps">
@@ -732,7 +736,7 @@ body:has(#ctrl-audience:checked)  label[for="ctrl-audience"]  { color: var(--bra
         </div>
 <div class="dim-finding warn">
           <div class="dim-finding-label warn">Autoship Active (w/ items): lowest promo engagement</div>
-          <div class="dim-finding-body">In the 8-14 day window: Active (w/ items) $0.34 RPD — lowest of the three groups; Active (no items) $0.68; NOT Active $1.51. Overall program RPD tells a different story: <strong>Active (no items) $0.086 → Active (w/ items) $0.076 → NOT Active $0.067</strong>. Active (w/ items) members outperform NOT Active overall because their sends are concentrated in productive windows: only ~14% of their sends land in 121+ (1.19M/month) or No Orders (0.07M/month). NOT Active members are far more lapsed: ~74% of their sends land in 121+ (7.79M/month) or No Orders (5.26M/month) where per-send returns approach zero. Despite being more responsive per send when recently active, their heavy lapsed volume drags overall RPD below Active (w/ items). Autoship cron orders do not appear in email attribution data, so these differences reflect genuine engagement patterns. <strong>A holdout will confirm how much incremental lift promo sends deliver on top of existing autoship cadence.</strong> Cadence and reactivation recommendations for each group are covered in items 4 and 5 of Recommended Next Steps.</div>
+          <div class="dim-finding-body">In the 8-14 day window: Active (w/ items) $0.34 RPD — lowest of the three groups; Active (no items) $0.68; NOT Active $1.51. Overall program RPD tells a different story: <strong>Active (no items) $0.086 → Active (w/ items) $0.076 → NOT Active $0.067</strong>. Active (w/ items) members outperform NOT Active at the all-segments level because their sends are concentrated in productive windows: only ~14% land in 121+ (1.19M/month) or No Orders (0.07M/month). NOT Active members are far more lapsed: ~74% of their sends land in 121+ (7.79M/month) or No Orders (5.26M/month) where per-send returns approach zero, dragging their overall RPD to $0.067. However, when No Orders is excluded, NOT Active recovers to $0.090 — above Active (w/ items) at $0.076 — confirming that among members who have ordered, NOT Active members are more valuable per send. Autoship cron orders do not appear in email attribution data, so these differences reflect genuine engagement patterns. <strong>A holdout will confirm how much incremental lift promo sends deliver on top of existing autoship cadence.</strong> Cadence and reactivation recommendations for each group are covered in items 4 and 5 of Recommended Next Steps.</div>
         </div>
 <div class="dim-finding flag">
           <div class="dim-finding-label flag">NOT Active: largest suppression opportunity</div>
@@ -1222,6 +1226,14 @@ const DIM_AS = {
       'NOT Active':        [0.27,0.67,1.09,1.40,1.00,0.73,7.41,5.19],
     },
   },
+  ordering: {
+    rpd:  { 'Active (w/ items)': 0.0756, 'Active (no items)': 0.1010, 'NOT Active': 0.0903 },
+    pcvr: { 'Active (w/ items)': 0.0812, 'Active (no items)': 0.1114, 'NOT Active': 0.1016 },
+    aov:  { 'Active (w/ items)': 93.2,   'Active (no items)': 90.7,   'NOT Active': 88.9 },
+    opt:  { 'Active (w/ items)': 0.0110, 'Active (no items)': 0.0119, 'NOT Active': 0.0151 },
+    del:  { 'Active (w/ items)': 9.70,   'Active (no items)': 6.71,   'NOT Active': 13.07 },
+    pct:  { 'Active (w/ items)': 32.9,   'Active (no items)': 22.8,   'NOT Active': 44.3 },
+  },
   overall: {
     rpd:  { 'Active (w/ items)': 0.0758, 'Active (no items)': 0.0858, 'NOT Active': 0.0673 },
     pcvr: { 'Active (w/ items)': 0.0815, 'Active (no items)': 0.0947, 'NOT Active': 0.0758 },
@@ -1351,8 +1363,29 @@ function buildDimTable(dimData, containerId, metricKey) {
     return `<tr class="dim-overall"><td style="font-weight:600;font-style:italic">All segments</td><td style="color:var(--muted2);font-weight:600">—</td>${oCells.join('')}</tr>`;
   })();
 
+  // Ordering row: all segments except No Orders (only where dimData.ordering exists)
+  const orderingRowHtml = (() => {
+    if (!dimData.ordering || !dimData.ordering[metricKey]) return '';
+    const or = dimData.ordering[metricKey];
+    const orVals = cols.map(c => or[c]).filter(v => v !== null && v !== undefined);
+    const orMax = orVals.length ? Math.max(...orVals) : null;
+    const orMin = orVals.length ? Math.min(...orVals) : null;
+    const orBest  = isOpt ? orMin : orMax;
+    const orWorst = isOpt ? orMax : orMin;
+    const orCells = cols.map(c => {
+      const v = or[c];
+      let cls = '';
+      if (v !== null && v !== undefined && orBest !== orWorst) {
+        if (v === orBest)  cls = 'cell-hi';
+        if (v === orWorst) cls = 'cell-lo';
+      }
+      return `<td class="${cls}" style="font-weight:600">${fmt(v)}</td>`;
+    });
+    return `<tr class="dim-ordering"><td style="font-weight:600;font-style:italic">Ordering segs only</td><td style="color:var(--muted2)">—</td>${orCells.join('')}</tr>`;
+  })();
+
   container.querySelector('thead').innerHTML = thead;
-  container.querySelector('tbody').innerHTML = overallRowHtml + tbody;
+  container.querySelector('tbody').innerHTML = overallRowHtml + orderingRowHtml + tbody;
 }
 
 function initDimTables() {
